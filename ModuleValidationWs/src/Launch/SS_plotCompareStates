@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Code ain't coding, or why are we here again? :(
+clear
+# Navigate to the build directory and run the simulation
+echo "Running Compare thing program..."
+cd ../
+echo "Generating plots..."
+cd ../src/SS/plots
+echo "Current path for plots generation:" $(pwd)
+
+# Activate the virtual environment and run the plotting script
+source ./SSenv/bin/activate  # Activate the virtual environment
+
+python3 compare_states.py
+if [ $? -ne 0 ]; then
+    echo "Plot generation failed. Exiting."
+    deactivate  # Deactivate the virtual environment
+    exit 1
+fi
+
+deactivate  # Deactivate the virtual environment
+echo "All tasks completed successfully."
+echo "Sos una Bestia."

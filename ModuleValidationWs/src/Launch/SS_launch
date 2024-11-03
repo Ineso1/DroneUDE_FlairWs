@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# Code ain't coding, or why are we here again? :(
+
+# Navigate to the build directory and run the simulation
+echo "Running the simulation..."
+cd ../../build
+make
+if [ $? -ne 0 ]; then
+    echo "Build failed. Exiting."
+    exit 1
+fi
+
+# Execute the simulation
+./src/SS/ss_executable
+if [ $? -ne 0 ]; then
+    echo "Simulation failed to execute. Exiting."
+    exit 1
+fi
+
+# Navigate to the plots directory and generate plots
+echo "Generating plots..."
+cd ../src/SS/plots
+
+# Print the current directory path for debugging
+echo "Current path for plots generation:" $(pwd)
+
+# Activate the virtual environment and run the plotting script
+#source ./SSenv/bin/activate  # Activate the virtual environment
+python plot_simulation.py
+if [ $? -ne 0 ]; then
+    echo "Plot generation failed. Exiting."
+    deactivate  # Deactivate the virtual environment
+    exit 1
+fi
+
+python3 compare_states.py
+if [ $? -ne 0 ]; then
+    echo "Plot generation failed. Exiting."
+    deactivate  # Deactivate the virtual environment
+    exit 1
+fi
+
+deactivate  # Deactivate the virtual environment
+
+clear
+
+echo "All tasks completed successfully mate, tomao, watta."
+echo 
+echo "****************************************************"
+echo "****************************************************"
+echo
+echo "SOS UNA BESTIA CHAVAL"
+echo "ESTAMOS FLIPANDO"
+echo
+echo "****************************************************"
+echo "****************************************************"
