@@ -54,19 +54,19 @@ MyLaw::MyLaw(const LayoutPosition* position, string name) : ControlLaw(position-
     /************************
     TRANSLATIONAL PARAMS LAYOUT
     ************************/
-    kp_rot_layout = new Vector3DSpinBox(reglages_groupbox->NewRow(),"kp_rot,.",-100,100,0.0001,6,Vector3Df(-10.000000,10.000000,10.000000));
-    kd_rot_1_layout = new Vector3DSpinBox(reglages_groupbox->LastRowLastCol(),"kd_rot_1,",-100,100,0.0001,5,Vector3Df(2.800000,2.800000,2.800000));
-    kd_rot_2_layout = new Vector3DSpinBox(reglages_groupbox->LastRowLastCol(),"kd_rot_2,",-100,100,0.0001,5,Vector3Df(0.10000,0.10000,0.10000));
+    kp_rot_layout = new Vector3DSpinBox(reglages_groupbox->NewRow(),"kp_rot,.",-100,100,0.0001,6,Vector3Df(-30.000000,30.000000,30.000000));
+    kd_rot_1_layout = new Vector3DSpinBox(reglages_groupbox->LastRowLastCol(),"kd_rot_1,",-100,100,0.0001,5,Vector3Df(15.000000,15.000000,15.000000));
+    kd_rot_2_layout = new Vector3DSpinBox(reglages_groupbox->LastRowLastCol(),"kd_rot_2,",-100,100,0.0001,5,Vector3Df(5.00000,5.00000,5.00000));
     sat_rot_layout = new DoubleSpinBox(reglages_groupbox->LastRowLastCol(),"sat_rot:",0,200,0.1,2,10);
 
     /************************
     TRANSLATIONAL PARAMS LAYOUT
     ************************/
-    kp_trans_layout = new Vector3DSpinBox(reglages_groupbox->NewRow(),"kpp_trans",-100,100,0.0000001,10,Vector3Df(0.0000000300,0.0000000300,0.0000200000));
-    kd_trans_1_layout = new Vector3DSpinBox(reglages_groupbox->LastRowLastCol(),"kd_trans_1,",-100,100,0.0001,10,Vector3Df(0.0000000030,0.0000000030,0.0000800000));
-    kd_trans_2_layout = new Vector3DSpinBox(reglages_groupbox->LastRowLastCol(),"kd_trans_2,",-100,100,0.0001,10,Vector3Df(0.0000000010,0.0000000010,0.0050000000));
+    kp_trans_layout = new Vector3DSpinBox(reglages_groupbox->NewRow(),"kpp_trans",-100,100,0.0000001,10,Vector3Df(0.1000000000,0.1000000000,0.1000000000));
+    kd_trans_1_layout = new Vector3DSpinBox(reglages_groupbox->LastRowLastCol(),"kd_trans_1,",-100,100,0.0001,10,Vector3Df(0.5000000000,0.5000000000,0.5000000000));
+    kd_trans_2_layout = new Vector3DSpinBox(reglages_groupbox->LastRowLastCol(),"kd_trans_2,",-100,100,0.0001,10,Vector3Df(0.0100000000,0.0100000000,0.0100000000));
     sat_trans_layout = new DoubleSpinBox(reglages_groupbox->LastRowLastCol(),"sat_trans:",0,200,0.1,2,10);
-    omega_gains_trans = new Vector3DSpinBox(reglages_groupbox->NewRow(),"omegaUDE_trans",0,100,0.01,3,Vector3Df(20.0,20.0,20.0));
+    omega_gains_trans = new Vector3DSpinBox(reglages_groupbox->NewRow(),"omegaUDE_trans",0,100,0.01,3,Vector3Df(60.0,60.0,60.0));
     
     /***********************
     WEIGHT LAYOUT
