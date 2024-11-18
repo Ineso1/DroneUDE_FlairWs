@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/ss_executable.dir/main.cpp.o CMakeFiles/ss_executable.dir/StateSpace.cpp.o CMakeFiles/ss_executable.dir/MyLaw.cpp.o CMakeFiles/ss_executable.dir/Drone.cpp.o -o ss_executable  -lstdc++fs
