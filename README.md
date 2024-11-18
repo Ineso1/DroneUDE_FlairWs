@@ -19,10 +19,25 @@ Follow these steps to build the project:
 2. **Execute the Build Script**  
     Run the script to build the project:
     ```bash
-   ./build_AeroInes.sh
+        ./build_AeroInes.sh
     ```
 
 ## Notes
 - The script assumes that the directory structure includes `FlairWs/flair-build` and `FlairWs/flair-src`.
-
 - If the `FLAIR_ROOT` environment variable is not set, the script will exit with an error message.
+
+
+## Make current project
+    To make a clean project execute
+    ```bash
+    cd build
+    make clean
+    make install
+    ```
+
+
+## Execute AeroInes
+    Execute command
+    ```bash
+    flairrun AeroInes
+    ```
