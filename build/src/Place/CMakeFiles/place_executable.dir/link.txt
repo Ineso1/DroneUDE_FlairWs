@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/place_executable.dir/main.cpp.o CMakeFiles/place_executable.dir/place_function.cpp.o -o place_executable

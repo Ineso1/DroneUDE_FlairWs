@@ -1,0 +1,38 @@
+[
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/src/SS",
+  "command": "/usr/bin/c++ -DSOURCE_DIR=\\\"/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/ModuleValidationWs\\\" -isystem /usr/include/eigen3 -g -std=gnu++17 -Wall -Wextra -o CMakeFiles/ss_executable.dir/main.cpp.o -c /home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/ModuleValidationWs/src/SS/main.cpp",
+  "file": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/ModuleValidationWs/src/SS/main.cpp",
+  "output": "src/SS/CMakeFiles/ss_executable.dir/main.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/src/SS",
+  "command": "/usr/bin/c++ -DSOURCE_DIR=\\\"/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/ModuleValidationWs\\\" -isystem /usr/include/eigen3 -g -std=gnu++17 -Wall -Wextra -o CMakeFiles/ss_executable.dir/StateSpace.cpp.o -c /home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/ModuleValidationWs/src/SS/StateSpace.cpp",
+  "file": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/ModuleValidationWs/src/SS/StateSpace.cpp",
+  "output": "src/SS/CMakeFiles/ss_executable.dir/StateSpace.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/src/SS",
+  "command": "/usr/bin/c++ -DSOURCE_DIR=\\\"/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/ModuleValidationWs\\\" -isystem /usr/include/eigen3 -g -std=gnu++17 -Wall -Wextra -o CMakeFiles/ss_executable.dir/MyLaw.cpp.o -c /home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/ModuleValidationWs/src/SS/MyLaw.cpp",
+  "file": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/ModuleValidationWs/src/SS/MyLaw.cpp",
+  "output": "src/SS/CMakeFiles/ss_executable.dir/MyLaw.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/src/SS",
+  "command": "/usr/bin/c++ -DSOURCE_DIR=\\\"/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/ModuleValidationWs\\\" -isystem /usr/include/eigen3 -g -std=gnu++17 -Wall -Wextra -o CMakeFiles/ss_executable.dir/Drone.cpp.o -c /home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/ModuleValidationWs/src/SS/Drone.cpp",
+  "file": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/ModuleValidationWs/src/SS/Drone.cpp",
+  "output": "src/SS/CMakeFiles/ss_executable.dir/Drone.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/src/Place",
+  "command": "/usr/bin/c++  -isystem /usr/include/eigen3 -g -std=gnu++11 -Wall -Wextra -o CMakeFiles/place_executable.dir/main.cpp.o -c /home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/ModuleValidationWs/src/Place/main.cpp",
+  "file": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/ModuleValidationWs/src/Place/main.cpp",
+  "output": "src/Place/CMakeFiles/place_executable.dir/main.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/src/Place",
+  "command": "/usr/bin/c++  -isystem /usr/include/eigen3 -g -std=gnu++11 -Wall -Wextra -o CMakeFiles/place_executable.dir/place_function.cpp.o -c /home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/ModuleValidationWs/src/Place/place_function.cpp",
+  "file": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/ModuleValidationWs/src/Place/place_function.cpp",
+  "output": "src/Place/CMakeFiles/place_executable.dir/place_function.cpp.o"
+}
+]
