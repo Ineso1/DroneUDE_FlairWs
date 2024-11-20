@@ -1,0 +1,74 @@
+{
+	"backtrace" : 2,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target",
+			"FLAIR_DEMO"
+		],
+		"files" : 
+		[
+			"/home/nessy/flair/flair-src/cmake-modules/GlobalCmakeFlair.cmake",
+			"newInes/Porfavor/uav/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 22,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 164,
+				"parent" : 1
+			}
+		]
+	},
+	"id" : "Porfavor_overwrite_xml_resources_in_install_dir::@756c9c0aa5718cc9afa0",
+	"name" : "Porfavor_overwrite_xml_resources_in_install_dir",
+	"paths" : 
+	{
+		"build" : "newInes/Porfavor/uav",
+		"source" : "newInes/Porfavor/uav"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 2,
+			"isGenerated" : true,
+			"path" : "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/Porfavor/uav/CMakeFiles/Porfavor_overwrite_xml_resources_in_install_dir",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/Porfavor/uav/CMakeFiles/Porfavor_overwrite_xml_resources_in_install_dir.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "UTILITY"
+}

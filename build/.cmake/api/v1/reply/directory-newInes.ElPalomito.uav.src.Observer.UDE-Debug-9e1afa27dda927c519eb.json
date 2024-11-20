@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "newInes/ElPalomito/uav/src/Observer/UDE",
+		"source" : "newInes/ElPalomito/uav/src/Observer/UDE"
+	}
+}

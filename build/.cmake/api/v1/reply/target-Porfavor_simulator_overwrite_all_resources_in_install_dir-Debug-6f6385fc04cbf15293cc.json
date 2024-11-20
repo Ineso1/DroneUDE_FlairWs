@@ -1,0 +1,81 @@
+{
+	"backtrace" : 3,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target",
+			"FLAIR_DEMO",
+			"FLAIR_DEMO_HOST_CXX"
+		],
+		"files" : 
+		[
+			"/home/nessy/flair/flair-src/cmake-modules/GlobalCmakeFlair.cmake",
+			"newInes/Porfavor/simulator/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 13,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 200,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 156,
+				"parent" : 2
+			}
+		]
+	},
+	"id" : "Porfavor_simulator_overwrite_all_resources_in_install_dir::@7c8e210d294920c51299",
+	"name" : "Porfavor_simulator_overwrite_all_resources_in_install_dir",
+	"paths" : 
+	{
+		"build" : "newInes/Porfavor/simulator",
+		"source" : "newInes/Porfavor/simulator"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 3,
+			"isGenerated" : true,
+			"path" : "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/Porfavor/simulator/CMakeFiles/Porfavor_simulator_overwrite_all_resources_in_install_dir",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/Porfavor/simulator/CMakeFiles/Porfavor_simulator_overwrite_all_resources_in_install_dir.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "UTILITY"
+}

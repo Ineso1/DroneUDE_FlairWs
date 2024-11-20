@@ -1,0 +1,72 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"INSTALL",
+			"FLAIR_DEMO",
+			"FLAIR_DEMO_HOST_CXX"
+		],
+		"files" : 
+		[
+			"/home/nessy/flair/flair-src/cmake-modules/GlobalCmakeFlair.cmake",
+			"newInes/ElPalomito/simulator/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 13,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 200,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 136,
+				"parent" : 2
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 3,
+			"component" : "Unspecified",
+			"destination" : "/home/nessy/flair/flair-install/bin/demos/x86_64/ElPalomito",
+			"paths" : 
+			[
+				"newInes/ElPalomito/simulator/ElPalomito_simulator_rt"
+			],
+			"targetId" : "ElPalomito_simulator_rt::@3ff5f14850fe1fd6e112",
+			"targetIndex" : 9,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 3,
+			"component" : "Unspecified",
+			"destination" : "/home/nessy/flair/flair-install/bin/demos/x86_64/ElPalomito",
+			"paths" : 
+			[
+				"newInes/ElPalomito/simulator/ElPalomito_simulator_nrt"
+			],
+			"targetId" : "ElPalomito_simulator_nrt::@3ff5f14850fe1fd6e112",
+			"targetIndex" : 5,
+			"type" : "target"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "newInes/ElPalomito/simulator",
+		"source" : "newInes/ElPalomito/simulator"
+	}
+}

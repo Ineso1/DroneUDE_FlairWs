@@ -5,7 +5,6 @@
 
 //#define AutomaticSwitch                       // Enable automatic switching
 #define POSITION_THRESHOLD_AUTOMATIC_MODE 0.1f  // Threshold for position change
-#define STABLE_FROM_TIME 0.2f
 
 #define targetSelect 0
 

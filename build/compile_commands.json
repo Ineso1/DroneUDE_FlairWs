@@ -1,0 +1,158 @@
+[
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/Porfavor/simulator",
+  "command": "g++ -DGL -D_GLIBCXX_USE_CXX11_ABI=0 -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSimulator -I/usr/include/irrlicht -g   -std=c++11 -o CMakeFiles/Porfavor_simulator_rt.dir/src/main.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/Porfavor/simulator/src/main.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/Porfavor/simulator/src/main.cpp",
+  "output": "newInes/Porfavor/simulator/CMakeFiles/Porfavor_simulator_rt.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/Porfavor/simulator",
+  "command": "g++ -DGL -D_GLIBCXX_USE_CXX11_ABI=0 -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSimulator -I/usr/include/irrlicht -g   -std=c++11 -o CMakeFiles/Porfavor_simulator_nrt.dir/src/main.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/Porfavor/simulator/src/main.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/Porfavor/simulator/src/main.cpp",
+  "output": "newInes/Porfavor/simulator/CMakeFiles/Porfavor_simulator_nrt.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/Porfavor/uav",
+  "command": "/usr/bin/c++  -I/usr/include/eigen3 -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSensorActuator -I/home/nessy/flair/flair-install/include/FlairFilter -I/home/nessy/flair/flair-install/include/FlairMeta -g   -std=c++11 -Wno-poison-system-directories -o CMakeFiles/Porfavor_rt.dir/src/main.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/Porfavor/uav/src/main.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/Porfavor/uav/src/main.cpp",
+  "output": "newInes/Porfavor/uav/CMakeFiles/Porfavor_rt.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/Porfavor/uav",
+  "command": "/usr/bin/c++  -I/usr/include/eigen3 -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSensorActuator -I/home/nessy/flair/flair-install/include/FlairFilter -I/home/nessy/flair/flair-install/include/FlairMeta -g   -std=c++11 -Wno-poison-system-directories -o CMakeFiles/Porfavor_rt.dir/src/UDEdrone.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/Porfavor/uav/src/UDEdrone.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/Porfavor/uav/src/UDEdrone.cpp",
+  "output": "newInes/Porfavor/uav/CMakeFiles/Porfavor_rt.dir/src/UDEdrone.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/Porfavor/uav",
+  "command": "/usr/bin/c++  -I/usr/include/eigen3 -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSensorActuator -I/home/nessy/flair/flair-install/include/FlairFilter -I/home/nessy/flair/flair-install/include/FlairMeta -g   -std=c++11 -Wno-poison-system-directories -o CMakeFiles/Porfavor_rt.dir/src/MyLaw.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/Porfavor/uav/src/MyLaw.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/Porfavor/uav/src/MyLaw.cpp",
+  "output": "newInes/Porfavor/uav/CMakeFiles/Porfavor_rt.dir/src/MyLaw.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/Porfavor/uav",
+  "command": "/usr/bin/c++  -I/usr/include/eigen3 -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSensorActuator -I/home/nessy/flair/flair-install/include/FlairFilter -I/home/nessy/flair/flair-install/include/FlairMeta -g   -std=c++11 -Wno-poison-system-directories -o CMakeFiles/Porfavor_rt.dir/src/StateSpace.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/Porfavor/uav/src/StateSpace.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/Porfavor/uav/src/StateSpace.cpp",
+  "output": "newInes/Porfavor/uav/CMakeFiles/Porfavor_rt.dir/src/StateSpace.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/Porfavor/uav",
+  "command": "/usr/bin/c++  -I/usr/include/eigen3 -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSensorActuator -I/home/nessy/flair/flair-install/include/FlairFilter -I/home/nessy/flair/flair-install/include/FlairMeta -g   -std=c++11 -Wno-poison-system-directories -o CMakeFiles/Porfavor_nrt.dir/src/main.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/Porfavor/uav/src/main.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/Porfavor/uav/src/main.cpp",
+  "output": "newInes/Porfavor/uav/CMakeFiles/Porfavor_nrt.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/Porfavor/uav",
+  "command": "/usr/bin/c++  -I/usr/include/eigen3 -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSensorActuator -I/home/nessy/flair/flair-install/include/FlairFilter -I/home/nessy/flair/flair-install/include/FlairMeta -g   -std=c++11 -Wno-poison-system-directories -o CMakeFiles/Porfavor_nrt.dir/src/UDEdrone.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/Porfavor/uav/src/UDEdrone.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/Porfavor/uav/src/UDEdrone.cpp",
+  "output": "newInes/Porfavor/uav/CMakeFiles/Porfavor_nrt.dir/src/UDEdrone.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/Porfavor/uav",
+  "command": "/usr/bin/c++  -I/usr/include/eigen3 -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSensorActuator -I/home/nessy/flair/flair-install/include/FlairFilter -I/home/nessy/flair/flair-install/include/FlairMeta -g   -std=c++11 -Wno-poison-system-directories -o CMakeFiles/Porfavor_nrt.dir/src/MyLaw.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/Porfavor/uav/src/MyLaw.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/Porfavor/uav/src/MyLaw.cpp",
+  "output": "newInes/Porfavor/uav/CMakeFiles/Porfavor_nrt.dir/src/MyLaw.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/Porfavor/uav",
+  "command": "/usr/bin/c++  -I/usr/include/eigen3 -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSensorActuator -I/home/nessy/flair/flair-install/include/FlairFilter -I/home/nessy/flair/flair-install/include/FlairMeta -g   -std=c++11 -Wno-poison-system-directories -o CMakeFiles/Porfavor_nrt.dir/src/StateSpace.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/Porfavor/uav/src/StateSpace.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/Porfavor/uav/src/StateSpace.cpp",
+  "output": "newInes/Porfavor/uav/CMakeFiles/Porfavor_nrt.dir/src/StateSpace.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/ElPalomito/simulator",
+  "command": "g++ -DGL -D_GLIBCXX_USE_CXX11_ABI=0 -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSimulator -I/usr/include/irrlicht -g   -std=c++11 -o CMakeFiles/ElPalomito_simulator_rt.dir/src/main.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/simulator/src/main.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/simulator/src/main.cpp",
+  "output": "newInes/ElPalomito/simulator/CMakeFiles/ElPalomito_simulator_rt.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/ElPalomito/simulator",
+  "command": "g++ -DGL -D_GLIBCXX_USE_CXX11_ABI=0 -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSimulator -I/usr/include/irrlicht -g   -std=c++11 -o CMakeFiles/ElPalomito_simulator_nrt.dir/src/main.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/simulator/src/main.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/simulator/src/main.cpp",
+  "output": "newInes/ElPalomito/simulator/CMakeFiles/ElPalomito_simulator_nrt.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/ElPalomito/uav",
+  "command": "/usr/bin/c++  -I/usr/include/eigen3 -I/home/nessy/flair/flair-src/include -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSensorActuator -I/home/nessy/flair/flair-install/include/FlairFilter -I/home/nessy/flair/flair-install/include/FlairMeta -g   -std=c++11 -Wno-poison-system-directories -o CMakeFiles/ElPalomito_rt.dir/src/main.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/main.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/main.cpp",
+  "output": "newInes/ElPalomito/uav/CMakeFiles/ElPalomito_rt.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/ElPalomito/uav",
+  "command": "/usr/bin/c++  -I/usr/include/eigen3 -I/home/nessy/flair/flair-src/include -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSensorActuator -I/home/nessy/flair/flair-install/include/FlairFilter -I/home/nessy/flair/flair-install/include/FlairMeta -g   -std=c++11 -Wno-poison-system-directories -o CMakeFiles/ElPalomito_rt.dir/src/Control/UDEdrone.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Control/UDEdrone.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Control/UDEdrone.cpp",
+  "output": "newInes/ElPalomito/uav/CMakeFiles/ElPalomito_rt.dir/src/Control/UDEdrone.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/ElPalomito/uav",
+  "command": "/usr/bin/c++  -I/usr/include/eigen3 -I/home/nessy/flair/flair-src/include -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSensorActuator -I/home/nessy/flair/flair-install/include/FlairFilter -I/home/nessy/flair/flair-install/include/FlairMeta -g   -std=c++11 -Wno-poison-system-directories -o CMakeFiles/ElPalomito_rt.dir/src/Control/MyLaw.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Control/MyLaw.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Control/MyLaw.cpp",
+  "output": "newInes/ElPalomito/uav/CMakeFiles/ElPalomito_rt.dir/src/Control/MyLaw.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/ElPalomito/uav",
+  "command": "/usr/bin/c++  -I/usr/include/eigen3 -I/home/nessy/flair/flair-src/include -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSensorActuator -I/home/nessy/flair/flair-install/include/FlairFilter -I/home/nessy/flair/flair-install/include/FlairMeta -g   -std=c++11 -Wno-poison-system-directories -o CMakeFiles/ElPalomito_rt.dir/src/Observer/StateSpace.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Observer/StateSpace.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Observer/StateSpace.cpp",
+  "output": "newInes/ElPalomito/uav/CMakeFiles/ElPalomito_rt.dir/src/Observer/StateSpace.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/ElPalomito/uav",
+  "command": "/usr/bin/c++  -I/usr/include/eigen3 -I/home/nessy/flair/flair-src/include -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSensorActuator -I/home/nessy/flair/flair-install/include/FlairFilter -I/home/nessy/flair/flair-install/include/FlairMeta -g   -std=c++11 -Wno-poison-system-directories -o CMakeFiles/ElPalomito_rt.dir/src/Observer/ObserverBase.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Observer/ObserverBase.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Observer/ObserverBase.cpp",
+  "output": "newInes/ElPalomito/uav/CMakeFiles/ElPalomito_rt.dir/src/Observer/ObserverBase.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/ElPalomito/uav",
+  "command": "/usr/bin/c++  -I/usr/include/eigen3 -I/home/nessy/flair/flair-src/include -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSensorActuator -I/home/nessy/flair/flair-install/include/FlairFilter -I/home/nessy/flair/flair-install/include/FlairMeta -g   -std=c++11 -Wno-poison-system-directories -o CMakeFiles/ElPalomito_rt.dir/src/Observer/UDE/UDE.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Observer/UDE/UDE.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Observer/UDE/UDE.cpp",
+  "output": "newInes/ElPalomito/uav/CMakeFiles/ElPalomito_rt.dir/src/Observer/UDE/UDE.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/ElPalomito/uav",
+  "command": "/usr/bin/c++  -I/usr/include/eigen3 -I/home/nessy/flair/flair-src/include -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSensorActuator -I/home/nessy/flair/flair-install/include/FlairFilter -I/home/nessy/flair/flair-install/include/FlairMeta -g   -std=c++11 -Wno-poison-system-directories -o CMakeFiles/ElPalomito_rt.dir/src/Observer/Luenberger/Luenberger.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Observer/Luenberger/Luenberger.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Observer/Luenberger/Luenberger.cpp",
+  "output": "newInes/ElPalomito/uav/CMakeFiles/ElPalomito_rt.dir/src/Observer/Luenberger/Luenberger.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/ElPalomito/uav",
+  "command": "/usr/bin/c++  -I/usr/include/eigen3 -I/home/nessy/flair/flair-src/include -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSensorActuator -I/home/nessy/flair/flair-install/include/FlairFilter -I/home/nessy/flair/flair-install/include/FlairMeta -g   -std=c++11 -Wno-poison-system-directories -o CMakeFiles/ElPalomito_nrt.dir/src/main.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/main.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/main.cpp",
+  "output": "newInes/ElPalomito/uav/CMakeFiles/ElPalomito_nrt.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/ElPalomito/uav",
+  "command": "/usr/bin/c++  -I/usr/include/eigen3 -I/home/nessy/flair/flair-src/include -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSensorActuator -I/home/nessy/flair/flair-install/include/FlairFilter -I/home/nessy/flair/flair-install/include/FlairMeta -g   -std=c++11 -Wno-poison-system-directories -o CMakeFiles/ElPalomito_nrt.dir/src/Control/UDEdrone.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Control/UDEdrone.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Control/UDEdrone.cpp",
+  "output": "newInes/ElPalomito/uav/CMakeFiles/ElPalomito_nrt.dir/src/Control/UDEdrone.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/ElPalomito/uav",
+  "command": "/usr/bin/c++  -I/usr/include/eigen3 -I/home/nessy/flair/flair-src/include -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSensorActuator -I/home/nessy/flair/flair-install/include/FlairFilter -I/home/nessy/flair/flair-install/include/FlairMeta -g   -std=c++11 -Wno-poison-system-directories -o CMakeFiles/ElPalomito_nrt.dir/src/Control/MyLaw.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Control/MyLaw.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Control/MyLaw.cpp",
+  "output": "newInes/ElPalomito/uav/CMakeFiles/ElPalomito_nrt.dir/src/Control/MyLaw.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/ElPalomito/uav",
+  "command": "/usr/bin/c++  -I/usr/include/eigen3 -I/home/nessy/flair/flair-src/include -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSensorActuator -I/home/nessy/flair/flair-install/include/FlairFilter -I/home/nessy/flair/flair-install/include/FlairMeta -g   -std=c++11 -Wno-poison-system-directories -o CMakeFiles/ElPalomito_nrt.dir/src/Observer/StateSpace.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Observer/StateSpace.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Observer/StateSpace.cpp",
+  "output": "newInes/ElPalomito/uav/CMakeFiles/ElPalomito_nrt.dir/src/Observer/StateSpace.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/ElPalomito/uav",
+  "command": "/usr/bin/c++  -I/usr/include/eigen3 -I/home/nessy/flair/flair-src/include -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSensorActuator -I/home/nessy/flair/flair-install/include/FlairFilter -I/home/nessy/flair/flair-install/include/FlairMeta -g   -std=c++11 -Wno-poison-system-directories -o CMakeFiles/ElPalomito_nrt.dir/src/Observer/ObserverBase.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Observer/ObserverBase.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Observer/ObserverBase.cpp",
+  "output": "newInes/ElPalomito/uav/CMakeFiles/ElPalomito_nrt.dir/src/Observer/ObserverBase.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/ElPalomito/uav",
+  "command": "/usr/bin/c++  -I/usr/include/eigen3 -I/home/nessy/flair/flair-src/include -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSensorActuator -I/home/nessy/flair/flair-install/include/FlairFilter -I/home/nessy/flair/flair-install/include/FlairMeta -g   -std=c++11 -Wno-poison-system-directories -o CMakeFiles/ElPalomito_nrt.dir/src/Observer/UDE/UDE.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Observer/UDE/UDE.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Observer/UDE/UDE.cpp",
+  "output": "newInes/ElPalomito/uav/CMakeFiles/ElPalomito_nrt.dir/src/Observer/UDE/UDE.cpp.o"
+},
+{
+  "directory": "/home/nessy/Documents/Hds_Repo/DroneUDE_FlairWs/build/newInes/ElPalomito/uav",
+  "command": "/usr/bin/c++  -I/usr/include/eigen3 -I/home/nessy/flair/flair-src/include -I/home/nessy/flair/flair-install/include/FlairCore -I/home/nessy/flair/flair-install/include/FlairSensorActuator -I/home/nessy/flair/flair-install/include/FlairFilter -I/home/nessy/flair/flair-install/include/FlairMeta -g   -std=c++11 -Wno-poison-system-directories -o CMakeFiles/ElPalomito_nrt.dir/src/Observer/Luenberger/Luenberger.cpp.o -c /home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Observer/Luenberger/Luenberger.cpp",
+  "file": "/home/nessy/Documents/NewFlairSim/flair-src/newInes/ElPalomito/uav/src/Observer/Luenberger/Luenberger.cpp",
+  "output": "newInes/ElPalomito/uav/CMakeFiles/ElPalomito_nrt.dir/src/Observer/Luenberger/Luenberger.cpp.o"
+}
+]

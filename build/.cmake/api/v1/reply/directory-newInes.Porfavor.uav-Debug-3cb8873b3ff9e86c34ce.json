@@ -1,0 +1,65 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"INSTALL",
+			"FLAIR_DEMO"
+		],
+		"files" : 
+		[
+			"/home/nessy/flair/flair-src/cmake-modules/GlobalCmakeFlair.cmake",
+			"newInes/Porfavor/uav/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 22,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 136,
+				"parent" : 1
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "/home/nessy/flair/flair-install/bin/demos/x86_64/Porfavor",
+			"paths" : 
+			[
+				"newInes/Porfavor/uav/Porfavor_rt"
+			],
+			"targetId" : "Porfavor_rt::@756c9c0aa5718cc9afa0",
+			"targetIndex" : 15,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "/home/nessy/flair/flair-install/bin/demos/x86_64/Porfavor",
+			"paths" : 
+			[
+				"newInes/Porfavor/uav/Porfavor_nrt"
+			],
+			"targetId" : "Porfavor_nrt::@756c9c0aa5718cc9afa0",
+			"targetIndex" : 11,
+			"type" : "target"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "newInes/Porfavor/uav",
+		"source" : "newInes/Porfavor/uav"
+	}
+}

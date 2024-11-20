@@ -1,0 +1,65 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"INSTALL",
+			"FLAIR_DEMO"
+		],
+		"files" : 
+		[
+			"/home/nessy/flair/flair-src/cmake-modules/GlobalCmakeFlair.cmake",
+			"newInes/ElPalomito/uav/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 28,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 136,
+				"parent" : 1
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "/home/nessy/flair/flair-install/bin/demos/x86_64/ElPalomito",
+			"paths" : 
+			[
+				"newInes/ElPalomito/uav/ElPalomito_rt"
+			],
+			"targetId" : "ElPalomito_rt::@4a60fa511ba81f971f07",
+			"targetIndex" : 4,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "/home/nessy/flair/flair-install/bin/demos/x86_64/ElPalomito",
+			"paths" : 
+			[
+				"newInes/ElPalomito/uav/ElPalomito_nrt"
+			],
+			"targetId" : "ElPalomito_nrt::@4a60fa511ba81f971f07",
+			"targetIndex" : 0,
+			"type" : "target"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "newInes/ElPalomito/uav",
+		"source" : "newInes/ElPalomito/uav"
+	}
+}

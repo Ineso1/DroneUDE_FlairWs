@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "newInes/ElPalomito/uav/src/Control",
+		"source" : "newInes/ElPalomito/uav/src/Control"
+	}
+}

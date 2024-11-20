@@ -118,10 +118,7 @@ namespace filter {
             Eigen::Vector3f perturbation_trans;
             Eigen::Vector3f perturbation_rot;
             
-        // Stabilization conditions
-            bool estimationEstabilized;
-            float timeToStabilize;
-            float timeFromStart;
+        // Custom time conditions
             bool firstUpdate;
 
     ///////////////////////////

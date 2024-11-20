@@ -1,15 +1,13 @@
-#include "Drone.h"
+#include "Control/Drone.h"
 #include <iostream>
 
 
 int main() {
-
-
-    float mass = 1.0f;
+    float mass = 0.405f;
     Eigen::Matrix3f J;
-    J << 0.01f, 0, 0,
-         0, 0.01f, 0,
-         0, 0, 0.02f;
+    J <<    2098e-6, 63.577538e-6, -2.002648e-6,
+            63.577538e-6, 2102e-6, 0.286186e-6,
+            -2.002648e-6, 0.286186e-6, 4068e-6;
     float dt = 0.01f;
     int total_iterations = 1000;
 
@@ -35,6 +33,11 @@ int main() {
     drone.setTargetPosition(target_position);
 
     for (int i = 0; i < total_iterations; ++i) {
+        if (i >= 2000 && i < 2500)
+        {
+            std::cout << "Aqui andamos" << std::endl;
+            drone.transDistrubance = Eigen::Vector3f(-1,1, -2);
+        }
         drone.applyControl();  
         drone.updateState();  
     }

@@ -6,16 +6,8 @@ namespace filter
 {
 	
 MyLaw::MyLaw(const LayoutPosition* position, string name) : ControlLaw(position->getLayout(), name, 4) {
-   
-    #ifdef PARAMSIM_H
-        timeToStabilize = STABLE_FROM_TIME;
-    #else
-        timeToStabilize = 2.0f;
-    #endif
-    
+       
     previous_chrono_time = std::chrono::high_resolution_clock::now();
-    estimationEstabilized = false;
-    timeFromStart = 0;
     firstUpdate = true;
 
     /************************
@@ -58,6 +50,8 @@ MyLaw::MyLaw(const LayoutPosition* position, string name) : ControlLaw(position-
     kd_rot_1_layout = new Vector3DSpinBox(reglages_groupbox->LastRowLastCol(),"kd_rot_1,",-100,100,0.0001,5,Vector3Df(15.000000,15.000000,15.000000));
     kd_rot_2_layout = new Vector3DSpinBox(reglages_groupbox->LastRowLastCol(),"kd_rot_2,",-100,100,0.0001,5,Vector3Df(5.00000,5.00000,5.00000));
     sat_rot_layout = new DoubleSpinBox(reglages_groupbox->LastRowLastCol(),"sat_rot:",0,200,0.1,2,10);
+    omega_gains_rot = new Vector3DSpinBox(reglages_groupbox->NewRow(),"omegaUDE_rot",0,100,0.01,3,Vector3Df(80.0,80.0,80.0));
+
 
     /************************
     TRANSLATIONAL PARAMS LAYOUT
@@ -155,11 +149,16 @@ void MyLaw::UpdateFrom(const io_data *data) {
         something2stream = startLogStream.str();
     }
      
-    #ifdef UDE_H
+    #if OBSERVER_TYPE == UDE_OBSERVER
         Observer::UDE::Omega_UDE_trans = (Eigen::Matrix3f() << 
                                             omega_gains_trans->Value().x, 0.0f, 0.0f,
                                             0.0f, omega_gains_trans->Value().y, 0.0f,
                                             0.0f, 0.0f, omega_gains_trans->Value().z).finished();
+
+        Observer::UDE::Omega_UDE_rot = (Eigen::Matrix3f() << 
+                                            omega_gains_rot->Value().x, 0.0f, 0.0f,
+                                            0.0f, omega_gains_rot->Value().y, 0.0f,
+                                            0.0f, 0.0f, omega_gains_rot->Value().z).finished();
     #endif
     
     // dt Calc
@@ -261,22 +260,12 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
     Eigen::Vector3f dp(stateM(17, 0), stateM(18, 0), stateM(19, 0));
     Eigen::Vector3f ddp(stateM(20, 0), stateM(21, 0), stateM(22, 0));
 
-    #if OBSERVER_TYPE == UDE_OBSERVER
-        if(firstUpdate){
-            dt = 0;
-        }
-    #endif
+    if(firstUpdate){
+        dt = 0;
+    }
 
     Eigen::Vector3f w_estimation_trans = EstimateDisturbance_trans(p, dp, dt);
     Eigen::Vector3f w_estimation_rot = EstimateDisturbance_rot(q, w, dt);
-
-    if (!estimationEstabilized) {
-        timeFromStart += dt;
-
-        if (timeFromStart >= timeToStabilize) {
-            estimationEstabilized = true;
-        }
-    }
 
     /**************************************
         Errors

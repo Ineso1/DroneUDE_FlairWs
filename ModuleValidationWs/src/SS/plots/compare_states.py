@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
+
 # Load CSV files
 trans_real_path = "../SimData/RealStateSpace_trans.csv"
 rot_real_path = "../SimData/RealStateSpace_rot.csv"
@@ -19,13 +20,26 @@ rot_real = pd.read_csv(rot_real_path)
 trans_est = pd.read_csv(trans_est_path)
 rot_est = pd.read_csv(rot_est_path)
 
+is_luenberger = "ddist_x" in trans_est.columns
+if is_luenberger:
+    numeric_columns_trans = [
+        'dp_x', 'dp_y', 'dp_z', 'ddp_x', 'ddp_y', 'ddp_z', 'w_hat_x', 'w_hat_y', 'w_hat_z'
+    ]
+    numeric_columns_rot = [
+        'dq_x', 'dq_y', 'dq_z', 'domega_x', 'domega_y', 'domega_z', 'w_hat_x', 'w_hat_y', 'w_hat_z'
+    ]
+else:
+    numeric_columns_trans = [
+        'dp_x', 'dp_y', 'dp_z', 'ddp_x', 'ddp_y', 'ddp_z', 'w_hat_x', 'w_hat_y', 'w_hat_z'
+    ]
+    numeric_columns_rot = [
+        'dq_x', 'dq_y', 'dq_z', 'domega_x', 'domega_y', 'domega_z', 'w_hat_x', 'w_hat_y', 'w_hat_z'
+    ]
+
 def ensure_numeric(df, columns):
     for col in columns:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors='coerce')
-
-numeric_columns_trans = ['dp_x', 'dp_y', 'dp_z', 'ddp_x', 'ddp_y', 'ddp_z', 'w_hat_x', 'w_hat_y', 'w_hat_z']
-numeric_columns_rot = ['dq_x', 'dq_y', 'dq_z', 'domega_x', 'domega_y', 'domega_z', 'w_hat_x', 'w_hat_y', 'w_hat_z']
 
 ensure_numeric(trans_real, numeric_columns_trans)
 ensure_numeric(trans_est, numeric_columns_trans)
@@ -137,3 +151,5 @@ plt.ylabel("Disturbance")
 
 plt.tight_layout(rect=[0, 0, 1, 0.96])
 plt.show()
+
+

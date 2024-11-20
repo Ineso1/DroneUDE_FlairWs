@@ -2,12 +2,18 @@ project(SS_project)
 
 set(CMAKE_CXX_STANDARD 17) 
 
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Control)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Observer)
+
 add_executable(
     ss_executable 
     main.cpp 
-    StateSpace.cpp
-    MyLaw.cpp
-    Drone.cpp
+    Control/Drone.cpp
+    Control/MyLaw.cpp
+    Observer/StateSpace.cpp
+    Observer/ObserverBase.cpp
+    Observer/UDE/UDE.cpp
+    Observer/Luenberger/Luenberger.cpp
 )
 
 target_link_libraries(
