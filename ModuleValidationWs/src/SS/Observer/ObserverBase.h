@@ -52,7 +52,6 @@ public:
 
     virtual void SaveStateEstimationCSV(const Eigen::VectorXf&, const Eigen::VectorXf&, const Eigen::Vector3f&, const std::string&);
 
-    // Pure virtual method for disturbance estimation 
     virtual Eigen::Vector3f EstimateDisturbance_trans(const Eigen::Vector3f& p, const Eigen::Vector3f& dp, float dt);
     virtual Eigen::Vector3f EstimateDisturbance_rot(const Eigen::Quaternionf& q, const Eigen::Vector3f& omega, float dt);
     

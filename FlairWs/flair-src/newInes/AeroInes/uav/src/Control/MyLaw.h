@@ -45,16 +45,19 @@ namespace filter {
     #if OBSERVER_TYPE == UDE_OBSERVER
         public Observer::UDE
     #elif OBSERVER_TYPE == LUENBERGER_OBSERVER
-        Observer::Luenberger
+        public Observer::Luenberger
     #elif OBSERVER_TYPE == SUPERTWISTING_OBSERVER
-        Observer::SuperTwisting
+        public Observer::SuperTwisting
     #else
-        Observer::ObserverBase // Default 
+        public Observer::ObserverBase // Default 
     #endif
     {
         public:
 
         string something2stream;
+        bool isDisturbanceActive; // Flag for disturbance activation
+        float activation_delay;   // Delay time for disturbance activation 
+        float this_time;
 
 
     ///////////////////////////

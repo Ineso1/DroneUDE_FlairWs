@@ -33,16 +33,15 @@ void Luenberger::InitializeEstimates() {
     x_trans.setZero();
     x_rot.setZero();
 
-    // Set extended dynamics matrices for translational and rotational dynamics
     A_ext_trans.block<6, 6>(0, 0) = A_trans;
     A_ext_trans.block<6, 3>(0, 6) = B_trans;
     A_ext_trans.block<3, 3>(6, 9) = Eigen::MatrixXf::Identity(3, 3);
-    A_ext_trans.block<3, 3>(9, 6) = -Eigen::MatrixXf::Identity(3, 3);
+    A_ext_trans.block<3, 3>(9, 6) =  0* -Eigen::MatrixXf::Identity(3, 3);
 
     A_ext_rot.block<6, 6>(0, 0) = A_rot;
     A_ext_rot.block<6, 3>(0, 6) = B_rot;
     A_ext_rot.block<3, 3>(6, 9) = Eigen::MatrixXf::Identity(3, 3);
-    A_ext_rot.block<3, 3>(9, 6) = -Eigen::MatrixXf::Identity(3, 3);
+    A_ext_rot.block<3, 3>(9, 6) = 0* -Eigen::MatrixXf::Identity(3, 3);
 
     B_ext_trans.block<6, 3>(0, 0) = B_trans;
     B_ext_rot.block<6, 3>(0, 0) = B_rot;
@@ -95,9 +94,8 @@ Eigen::Vector3f Luenberger::EstimateDisturbance_trans(const Eigen::Vector3f& p, 
     Eigen::VectorXf dx_hat_ext_L_trans = 
         A_ext_trans * x_trans + 
         B_ext_trans * (u_thrust - Eigen::Vector3f(0, 0, g * mass)) + 
-        0*L_trans * (y - C_ext_trans * x_trans);
+        L_trans * (y - C_ext_trans * x_trans);
 
-    std::cout << y << std::endl<< std::endl;
     x_trans += dt * dx_hat_ext_L_trans;
     Eigen::Vector3f disturbance_estimate = x_trans.segment<3>(6);
     SaveStateEstimationCSV(x_trans, dx_hat_ext_L_trans, disturbance_estimate, "TranslationalEstimation.csv");

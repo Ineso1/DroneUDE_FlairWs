@@ -1,4 +1,5 @@
 #include "ObserverBase.h"
+#include <iostream>
 
 namespace Observer {
 
@@ -30,6 +31,7 @@ ObserverBase::ObserverBase() {
                                         << "dx_hat_7,dx_hat_8,dx_hat_9,dx_hat_10,dx_hat_11,dx_hat_12,"
                                         << "w_hat_x,w_hat_y,w_hat_z\n";
             }
+            std::cout<< "Luenberger format"<<std::endl;
         #else
             translationEstimationFileCSV.open(disturbanceTranslationFilePath, std::ios::trunc);
             rotationEstimationFileCSV.open(disturbanceRotationFilePath, std::ios::trunc);
@@ -39,6 +41,7 @@ ObserverBase::ObserverBase() {
             if (rotationEstimationFileCSV.is_open()) {
                 rotationEstimationFileCSV << "q_x,q_y,q_z,dq_x,dq_y,dq_z,omega_x,omega_y,omega_z,domega_x,domega_y,domega_z,w_hat_x,w_hat_y,w_hat_z\n";
             }
+            std::cout<< "Default format"<<std::endl;
         #endif
     #endif
 
@@ -69,9 +72,6 @@ ObserverBase::ObserverBase() {
 
     C_trans = Eigen::MatrixXf::Zero(3, 6);
     C_trans.block<3, 3>(0, 0) = Eigen::Matrix3f::Identity(); // Top left diagonal
-    C_trans.block<3, 3>(0, 3) = Eigen::Matrix3f::Identity(); // Top right diagonal
-
-
 
     A_rot = Eigen::MatrixXf::Zero(6, 6);
     A_rot.block<3, 3>(0, 3) = Eigen::Matrix3f::Identity();
@@ -79,7 +79,6 @@ ObserverBase::ObserverBase() {
     B_rot.block<3, 3>(3, 0) = J.inverse();
     C_rot = Eigen::MatrixXf::Zero(3, 6);
     C_rot.block<3, 3>(0, 0) = Eigen::Matrix3f::Identity();
-
 
     w_hat_trans = Eigen::Vector3f::Zero();
     w_hat_rot = Eigen::Vector3f::Zero();

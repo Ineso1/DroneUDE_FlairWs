@@ -9,6 +9,9 @@ MyLaw::MyLaw(const LayoutPosition* position, string name) : ControlLaw(position-
        
     previous_chrono_time = std::chrono::high_resolution_clock::now();
     firstUpdate = true;
+    isDisturbanceActive = false;
+    activation_delay = 0.0f;
+    this_time = 0;
 
     /************************
     Mutex for data access.
@@ -173,6 +176,15 @@ void MyLaw::UpdateFrom(const io_data *data) {
     dt = alt_dt.count();
     previous_chrono_time = current_time;
 
+    if (!isDisturbanceActive) {
+        this_time += dt;
+        std::cout << "time " << dt << "\n";
+        if (this_time >= activation_delay) {
+            isDisturbanceActive = true;
+            std::cout << "Disturbance estimator activated after " << activation_delay << " seconds\n";
+        }
+    }
+
     #ifdef DT_LOG
         std::ostringstream dtLogStream;
         dtLogStream << "\nCalculated dt (original): " << dt << " seconds\n";
@@ -272,6 +284,11 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
     Eigen::Vector3f w_estimation_trans = EstimateDisturbance_trans(p, dp, dt);
     Eigen::Vector3f w_estimation_rot = EstimateDisturbance_rot(q, w, dt);
 
+    if(!isDisturbanceActive){
+        w_estimation_trans *= 0; 
+        w_estimation_rot *= 0;
+    }
+
     /**************************************
         Errors
     **************************************/
@@ -302,11 +319,16 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
     Eigen::Vector3f perturbed_u_thrust;
     float perturbed_Fu;
 
-    Eigen::Vector3f testCompensation(0.95 * w_estimation_trans.x(), 0.95 * w_estimation_trans.y(), w_estimation_trans.z());
+    #if OBSERVER_TYPE == UDE_OBSERVER
+        w_estimation_trans = Eigen::Vector3f(0.95 * w_estimation_trans.x(), 0.95 * w_estimation_trans.y(), w_estimation_trans.z());
+    #elif OBSERVER_TYPE == LUENBERGER_OBSERVER
+        w_estimation_trans = Eigen::Vector3f(0.8 * -w_estimation_trans.x(), 0.8 * -w_estimation_trans.y(), w_estimation_trans.z());
+    #endif
+
 
     Eigen::Vector3f translation_rej(perturbation_trans.x() - w_estimation_trans.x(), perturbation_trans.y() - w_estimation_trans.y(), perturbation_trans.z() - w_estimation_trans.z());
 
-    u_thrust += Eigen::Vector3f(0, 0, g * mass) - (kd_trans_2.array() * dp.array()).matrix() - testCompensation; //- w_estimation_trans
+    u_thrust += Eigen::Vector3f(0, 0, g * mass) - (kd_trans_2.array() * dp.array()).matrix() - w_estimation_trans; //- w_estimation_trans
     perturbed_u_thrust = u_thrust + perturbation_trans;
 
     #ifdef PERTURBANCE_LOG
@@ -323,8 +345,6 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
 
     Eigen::Vector3f uz_uvec;
     if (perturbed_u_thrust.norm() != 0) {
-    // if (u_thrust.norm() != 0) {
-        // uz_uvec = u_thrust.normalized();
         uz_uvec = perturbed_u_thrust.normalized();
     } else {
         uz_uvec = Eigen::Vector3f::UnitZ();
@@ -347,9 +367,9 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
     if (!eomega.array().isFinite().all()) {
         eomega = Eigen::Vector3f::Zero();
     }
-    u_torque = -kp_rot.array() * RotVec(eq).array() - kd_rot_1.array() * eomega.array() + 0*w_estimation_rot.array();    
+    u_torque = -kp_rot.array() * RotVec(eq).array() - kd_rot_1.array() * eomega.array();    
     if (u_torque.norm() != 0) {
-        u_torque = (sat_rot * tanh(u_torque.norm() / sat_rot) * u_torque.normalized().array() - kd_rot_2.array() * eomega.array()) + 0*w_estimation_rot.array();
+        u_torque = (sat_rot * tanh(u_torque.norm() / sat_rot) * u_torque.normalized().array() - kd_rot_2.array() * eomega.array());
     }
     else {
         u_torque = Eigen::Vector3f::Zero();

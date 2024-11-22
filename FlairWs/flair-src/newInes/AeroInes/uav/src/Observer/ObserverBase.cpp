@@ -5,16 +5,39 @@ namespace Observer {
 ObserverBase::ObserverBase() {
 
     #ifdef PARAMSIM_H
+
         disturbanceTranslationFilePath = DISTURBANCE_TRANSLATIONAL_FILE_PATH;
         disturbanceRotationFilePath = DISTURBANCE_ROTATIONAL_FILE_PATH;
-        translationEstimationFileCSV.open(disturbanceTranslationFilePath, std::ios::trunc);
-        rotationEstimationFileCSV.open(disturbanceRotationFilePath, std::ios::trunc);
-        if (translationEstimationFileCSV.is_open()) {
-            translationEstimationFileCSV << "p_x,p_y,p_z,dp_x_prime,dp_y_prime,dp_z_prime,dp_x,dp_y,dp_z,ddp_x,ddp_y,ddp_z,w_hat_x,w_hat_y,w_hat_z\n";
-        }
-        if (rotationEstimationFileCSV.is_open()) {
-            rotationEstimationFileCSV << "q_x,q_y,q_z,dq_x,dq_y,dq_z,omega_x,omega_y,omega_z,domega_x,domega_y,domega_z,w_hat_x,w_hat_y,w_hat_z\n";
-        }
+        
+        #if OBSERVER_TYPE == LUENBERGER_OBSERVER
+            translationEstimationFileCSV.open(disturbanceTranslationFilePath, std::ios::trunc);
+            rotationEstimationFileCSV.open(disturbanceRotationFilePath, std::ios::trunc);
+
+            if (translationEstimationFileCSV.is_open()) {
+                translationEstimationFileCSV << "p_x,p_y,p_z,dp_x_prime,dp_y_prime,dp_z_prime,"
+                                            << "dist_x,dist_y,dist_z,ddist_x,ddist_y,ddist_z,"
+                                            << "dp_x,dp_y,dp_z,ddp_x,ddp_y,ddp_z,"
+                                            << "dx_hat_7,dx_hat_8,dx_hat_9,dx_hat_10,dx_hat_11,dx_hat_12,"
+                                            << "w_hat_x,w_hat_y,w_hat_z\n";
+            }
+
+            if (rotationEstimationFileCSV.is_open()) {
+                rotationEstimationFileCSV << "q_x,q_y,q_z,dq_x,dq_y,dq_z,"
+                                        << "dist_x,dist_y,dist_z,ddist_x,ddist_y,ddist_z,"
+                                        << "omega_x,omega_y,omega_z,domega_x,domega_y,domega_z,"
+                                        << "dx_hat_7,dx_hat_8,dx_hat_9,dx_hat_10,dx_hat_11,dx_hat_12,"
+                                        << "w_hat_x,w_hat_y,w_hat_z\n";
+            }
+        #else
+            translationEstimationFileCSV.open(disturbanceTranslationFilePath, std::ios::trunc);
+            rotationEstimationFileCSV.open(disturbanceRotationFilePath, std::ios::trunc);
+            if (translationEstimationFileCSV.is_open()) {
+                translationEstimationFileCSV << "p_x,p_y,p_z,dp_x_prime,dp_y_prime,dp_z_prime,dp_x,dp_y,dp_z,ddp_x,ddp_y,ddp_z,w_hat_x,w_hat_y,w_hat_z\n";
+            }
+            if (rotationEstimationFileCSV.is_open()) {
+                rotationEstimationFileCSV << "q_x,q_y,q_z,dq_x,dq_y,dq_z,omega_x,omega_y,omega_z,domega_x,domega_y,domega_z,w_hat_x,w_hat_y,w_hat_z\n";
+            }
+        #endif
     #endif
 
     g = 9.81f;
