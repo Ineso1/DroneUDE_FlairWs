@@ -9,19 +9,19 @@ UDEdrone::UDEdrone(TargetController *controller): UavStateMachine(controller), b
     VrpnClient* vrpnclient=new VrpnClient("vrpn", uav->GetDefaultVrpnAddress(),80,uav->GetDefaultVrpnConnectionType());
     if(vrpnclient->ConnectionType()==VrpnClient::Xbee) {
         uavVrpn = new MetaVrpnObject(uav->ObjectName(),(uint8_t)0);
-        refVrpn=new MetaVrpnObject("target",1);
+        //refVrpn=new MetaVrpnObject("target",1);
     } else if (vrpnclient->ConnectionType()==VrpnClient::Vrpn) {
         uavVrpn = new MetaVrpnObject(uav->ObjectName());
-        refVrpn = new MetaVrpnObject("target");
+        //refVrpn = new MetaVrpnObject("target");
     } else if (vrpnclient->ConnectionType()==VrpnClient::VrpnLite) {
         uavVrpn = new MetaVrpnObject(uav->ObjectName());
-        refVrpn=new MetaVrpnObject("target");
+        //refVrpn=new MetaVrpnObject("target");
     }
     if(uav->GetType()=="mamboedu") {
       SetFailSafeAltitudeSensor(uavVrpn->GetAltitudeSensor());
     }
     getFrameworkManager()->AddDeviceToLog(uavVrpn);
-    getFrameworkManager()->AddDeviceToLog(refVrpn);
+    //getFrameworkManager()->AddDeviceToLog(refVrpn);
     getFrameworkManager()->AddDeviceToLog(myLaw);
     vrpnclient->Start();
 
@@ -60,12 +60,14 @@ void UDEdrone::SignalEvent(Event_t event) {
 
 void UDEdrone::ExtraSecurityCheck(void) {
     if ((!vrpnLost) && ((behaviourMode==BehaviourMode_t::Trajectory) || (behaviourMode==BehaviourMode_t::PositionHold))) {
-        if (!refVrpn->IsTracked(500)) {
+      /*
+      if (!refVrpn->IsTracked(500)) {
             Thread::Err("VRPN, target lost\n");
             vrpnLost=true;
             EnterFailSafeMode();
             Land();
         }
+       */
         if (!uavVrpn->IsTracked(500)) {
             Thread::Err("VRPN, uav lost\n");
             vrpnLost=true;
@@ -217,7 +219,7 @@ void UDEdrone::CoordFrameCorrection(Vector3Df &uav_p, Vector3Df &uav_dp, Vector3
 }
 
 void UDEdrone::ApplyControl(){
-    Vector3Df ref_p;
+    Vector3Df ref_p(0,0,0);
     Vector3Df uav_p,uav_dp; 
     Vector3Df aim_p, aim_dp;
     Quaternion q = GetCurrentQuaternion();
@@ -228,7 +230,7 @@ void UDEdrone::ApplyControl(){
     aim_dp = Vector3Df(0,0,0);
     yawHold = 0;
 
-    refVrpn->GetPosition(ref_p);
+    //refVrpn->GetPosition(ref_p);
     uavVrpn->GetPosition(uav_p);
     uavVrpn->GetSpeed(uav_dp);
     GetDefaultOrientation()->GetQuaternionAndAngularRates(q, w);
