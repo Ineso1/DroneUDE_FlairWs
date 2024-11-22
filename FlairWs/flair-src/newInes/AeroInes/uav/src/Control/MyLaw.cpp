@@ -406,9 +406,9 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
     dataexp->SetValue(14,0, ep(0));
     dataexp->SetValue(15,0, ep(1));
     dataexp->SetValue(16,0, ep(2));
-    dataexp->SetValue(17,0, testCompensation(0));
-    dataexp->SetValue(18,0, testCompensation(1));
-    dataexp->SetValue(19,0, testCompensation(2));
+    dataexp->SetValue(17,0, w_estimation_trans(0));
+    dataexp->SetValue(18,0, w_estimation_trans(1));
+    dataexp->SetValue(19,0, w_estimation_trans(2));
     dataexp->SetValue(20,0, w_estimation_rot(0));
     dataexp->SetValue(21,0, w_estimation_rot(1));
     dataexp->SetValue(22,0, w_estimation_rot(2));
