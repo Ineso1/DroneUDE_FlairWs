@@ -11,35 +11,40 @@ MyLaw::MyLaw(const LayoutPosition* position, string name) : ControlLaw(position-
     firstUpdate = true;
 
     /************************
-    Dynamic varibles
-    ************************/ 
+    Mutex for data access.
+    ************************/
     input = new Matrix(this,23,1,floatType,name);
+
+    /************************
+    Label descriptor for data saved.
+    ************************/
     MatrixDescriptor* desc = new MatrixDescriptor(23,1);
-    desc->SetElementName(0,0,"q.q0");
-    desc->SetElementName(1,0,"q.q1");
-    desc->SetElementName(2,0,"q.q2");
-    desc->SetElementName(3,0,"q.q3");
-    desc->SetElementName(4,0,"dq.q0");
-    desc->SetElementName(5,0,"dq.q1");
-    desc->SetElementName(6,0,"dq.q2");
-    desc->SetElementName(7,0,"dq.q3");
-    desc->SetElementName(8,0,"w.x");
-    desc->SetElementName(9,0,"w.y");
-    desc->SetElementName(10,0,"w.z");
-    desc->SetElementName(11,0,"dw.x");
-    desc->SetElementName(12,0,"dw.y");
-    desc->SetElementName(13,0,"dw.z");
-    desc->SetElementName(14,0,"p.x");
-    desc->SetElementName(15,0,"p.y");
-    desc->SetElementName(16,0,"p.z");
-    desc->SetElementName(17,0,"dp.x");
-    desc->SetElementName(18,0,"dp.y");
-    desc->SetElementName(19,0,"dp.z");
-    desc->SetElementName(20,0,"ddp.x");
-    desc->SetElementName(21,0,"ddp.y");
-    desc->SetElementName(22,0,"ddp.z");
-    stateM = new Matrix(this,desc,floatType,name);
-    AddDataToLog(stateM);
+    desc->SetElementName(0,0,"q0");
+    desc->SetElementName(1,0,"q1");
+    desc->SetElementName(2,0,"q2");
+    desc->SetElementName(3,0,"q3");
+    desc->SetElementName(4,0,"wx");
+    desc->SetElementName(5,0,"wy");
+    desc->SetElementName(6,0,"wz");
+    desc->SetElementName(7,0,"px");
+    desc->SetElementName(8,0,"py");
+    desc->SetElementName(9,0,"pz");
+    desc->SetElementName(10,0,"u_roll");
+    desc->SetElementName(11,0,"u_pitch");
+    desc->SetElementName(12,0,"u_yaw");
+    desc->SetElementName(13,0,"thrust");
+    desc->SetElementName(14,0,"ecx");
+    desc->SetElementName(15,0,"ecy");
+    desc->SetElementName(16,0,"ecz");
+    desc->SetElementName(17,0,"udeTx");
+    desc->SetElementName(18,0,"udeTy");
+    desc->SetElementName(19,0,"udeTz");
+    desc->SetElementName(20,0,"udeRx");
+    desc->SetElementName(21,0,"udeRy");
+    desc->SetElementName(22,0,"udeRz");
+    dataexp = new Matrix(this,desc,floatType,name);
+    delete desc;
+    AddDataToLog(dataexp);
     Reset();
     GroupBox* reglages_groupbox = new GroupBox(position,name);
 
@@ -382,10 +387,37 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
         Tauu = Eigen::Vector3f::Zero();
     }
 
+    // Data to be saved using FlAir
+    dataexp->GetMutex();
+    dataexp->SetValue(0,0, q.w());
+    dataexp->SetValue(1,0, q.x());
+    dataexp->SetValue(2,0, q.y());
+    dataexp->SetValue(3,0, q.z());
+    dataexp->SetValue(4,0, w(0));
+    dataexp->SetValue(5,0, w(1));
+    dataexp->SetValue(6,0, w(2));
+    dataexp->SetValue(7,0, p(0));
+    dataexp->SetValue(8,0, p(1));
+    dataexp->SetValue(9,0, p(2));
+    dataexp->SetValue(10,0, Tauu.x());
+    dataexp->SetValue(11,0, Tauu.y());
+    dataexp->SetValue(12,0, Tauu.z());
+    dataexp->SetValue(13,0, Fu);
+    dataexp->SetValue(14,0, ep(0));
+    dataexp->SetValue(15,0, ep(1));
+    dataexp->SetValue(16,0, ep(2));
+    dataexp->SetValue(17,0, testCompensation(0));
+    dataexp->SetValue(18,0, testCompensation(1));
+    dataexp->SetValue(19,0, testCompensation(2));
+    dataexp->SetValue(20,0, w_estimation_rot(0));
+    dataexp->SetValue(21,0, w_estimation_rot(1));
+    dataexp->SetValue(22,0, w_estimation_rot(2));
+    dataexp->ReleaseMutex();
+
     outputMatrix(0, 0) = Tauu.x();
     outputMatrix(1, 0) = Tauu.y();
     outputMatrix(2, 0) = Tauu.z();
-    outputMatrix(3, 0) = perturbed_Fu;
+    outputMatrix(3, 0) = perturbed_Fu; // Cambiar a Fu si se quiere el valor sin perturbaciones
     #ifdef SAVE_CONTROL_INPUT_CSV
         SaveControlCSV();
     #endif

@@ -145,7 +145,8 @@ namespace filter {
     // DYNAMIC VARIABLES MATRIX
     ///////////////////////////
 
-            Matrix *stateM; // Description Matrix
+            Matrix *stateM, *dataexp; // Description Matrix
+
             
     ///////////////////////////
     // CONSTRUCTOR
