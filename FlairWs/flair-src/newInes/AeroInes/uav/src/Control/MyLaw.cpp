@@ -50,6 +50,7 @@ MyLaw::MyLaw(const LayoutPosition* position, string name) : ControlLaw(position-
     delete desc;
     AddDataToLog(dataexp);
     Reset();
+
     GroupBox* reglages_groupbox = new GroupBox(position,name);
 
     /************************
@@ -75,6 +76,7 @@ MyLaw::MyLaw(const LayoutPosition* position, string name) : ControlLaw(position-
     WEIGHT LAYOUT
     ************************/
     mass_layout = new DoubleSpinBox(reglages_groupbox->NewRow(),"Massa que mas aplauda",0.1,10,0.001,3,0.405);
+    motorConst = new DoubleSpinBox(reglages_groupbox->NewRow(),"Motor const",0,20,0.0001,10,10);
 
     Observer::ObserverBase::J = Eigen::Matrix3f();
     Observer::ObserverBase::J <<    2098e-6, 63.577538e-6, -2.002648e-6,
@@ -169,6 +171,8 @@ void MyLaw::UpdateFrom(const io_data *data) {
                                             0.0f, omega_gains_rot->Value().y, 0.0f,
                                             0.0f, 0.0f, omega_gains_rot->Value().z).finished();
     #endif
+
+    motorK = motorConst->Value();
     
     // dt Calc
     float dt,Fth;
@@ -287,14 +291,14 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
     Eigen::Vector3f w_estimation_trans = EstimateDisturbance_trans(p, dp, dt);
     Eigen::Vector3f w_estimation_rot = EstimateDisturbance_rot(q, w, dt);
 
+    if(w_estimation_trans.norm() > 7){
+        resetUDE();
+        std::cout<<"quieto"<<std::endl;
+    }
+
     if(!isDisturbanceActive){
         w_estimation_trans *= 0; 
         w_estimation_rot *= 0;
-
-        std::cout<<"nel"<<std::endl;
-    }
-    else {
-        std::cout<<"smn"<<std::endl;
     }
 
     /**************************************
@@ -414,6 +418,9 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
     if (!Tauu.array().isFinite().all()) {
         Tauu = Eigen::Vector3f::Zero();
     }
+
+    perturbed_Fu = perturbed_Fu / motorK;
+    Tauu = Tauu / motorK;
 
     // Data to be saved using FlAir
     dataexp->GetMutex();

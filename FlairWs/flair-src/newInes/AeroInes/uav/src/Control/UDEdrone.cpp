@@ -5,7 +5,10 @@ using namespace flair::core;
 UDEdrone::UDEdrone(TargetController *controller): UavStateMachine(controller), behaviourMode(BehaviourMode_t::Default), vrpnLost(false) {
     perturbation = false;
     uav = GetUav();
-    myLaw = new MyLaw(setupLawTab->At(1,0),"MyLaw");
+
+    Tab *customLawTab = new Tab(getFrameworkManager()->GetTabWidget(), "Custom Law");
+    GridLayout* execLayout = new GridLayout(customLawTab->NewRow(), "Custom Law Layout");
+    myLaw = new MyLaw(execLayout->At(1,0),"MyLaw");
 
     VrpnClient* vrpnclient=new VrpnClient("vrpn", uav->GetDefaultVrpnAddress(),80,uav->GetDefaultVrpnConnectionType());
     if(vrpnclient->ConnectionType()==VrpnClient::Xbee) {
@@ -283,9 +286,9 @@ void UDEdrone::ComputeCustomTorques(Euler &torques) {
     float pitch = myLaw->Output(1);
     float yaw = myLaw->Output(2);
     //Just 2 be sure nothing happen here
-    torques.roll = std::isnan(roll) ? 0.0f : roll/10;
-    torques.pitch = std::isnan(pitch) ? 0.0f : -pitch/10;
-    torques.yaw = std::isnan(yaw) ? 0.0f : -yaw/10;
+    torques.roll = std::isnan(roll) ? 0.0f : roll;
+    torques.pitch = std::isnan(pitch) ? 0.0f : -pitch;
+    torques.yaw = std::isnan(yaw) ? 0.0f : -yaw;
 }
 
 float UDEdrone::ComputeCustomThrust() {
@@ -309,7 +312,7 @@ float UDEdrone::ComputeCustomThrust() {
         thrust = 0.0f;
     }
     // inverted frame :v aero standard or something like that
-    return -thrust/10;
+    return -thrust;
 }
 
 

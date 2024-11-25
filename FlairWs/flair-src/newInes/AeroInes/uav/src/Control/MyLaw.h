@@ -4,6 +4,8 @@
 #include "../ParamSim.h"
 #include <Matrix.h>
 #include <Layout.h>
+#include <Tab.h>
+#include <GridLayout.h>
 #include <LayoutPosition.h>
 #include <DoubleSpinBox.h>
 #include <Vector3D.h>
@@ -83,6 +85,9 @@ namespace filter {
             Vector3DSpinBox *omega_gains_trans;
             Vector3DSpinBox *omega_gains_rot;
 
+        // Motor constant
+            DoubleSpinBox *motorConst;
+
     ///////////////////////////
     // GAINS AND PARAMS
     ///////////////////////////
@@ -112,6 +117,7 @@ namespace filter {
 
             float Fu;
             Eigen::Vector3f Tauu;
+            float motorK;
 
     ///////////////////////////
     // PERTURBATIONS

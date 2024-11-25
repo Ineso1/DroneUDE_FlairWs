@@ -44,6 +44,7 @@ public:
     UDE();
     ~UDE();
 
+    void resetUDE();
     void SetNewGainUDE_trans(Eigen::Matrix3f&, Eigen::Vector3f&, Eigen::Vector3f&);
     Eigen::Vector3f EstimateDisturbance_trans(const Eigen::Vector3f& p, const Eigen::Vector3f& dp, float dt) override;
     Eigen::Vector3f EstimateDisturbance_rot(const Eigen::Quaternionf& q, const Eigen::Vector3f& omega, float dt) override;
