@@ -120,6 +120,8 @@ namespace filter {
         // Perturbations
             Eigen::Vector3f perturbation_trans;
             Eigen::Vector3f perturbation_rot;
+
+            Eigen::Vector3f rejectionPercent;
             
         // Custom time conditions
             bool firstUpdate;
@@ -171,6 +173,7 @@ namespace filter {
 
             void SetTarget(Vector3Df, Vector3Df);
             void SetPerturbation(Vector3Df, Vector3Df);
+            void SetRejectionPercent(Vector3Df);
 
     ///////////////////////////
     // MA CONTROL ALGO

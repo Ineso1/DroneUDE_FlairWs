@@ -6,6 +6,8 @@
 //#define AutomaticSwitch                       // Enable automatic switching
 #define POSITION_THRESHOLD_AUTOMATIC_MODE 0.1f  // Threshold for position change
 
+//#define ACTIVATE_DISTURBANCE_REJECTION_BY_TIME
+
 #define targetSelect 0
 
 #define UDE_THRESHOLD 0.95f

@@ -101,6 +101,7 @@ class UDEdrone : public UavStateMachine {
         void StopTrajectory(void);      // Stop Button  
         void PositionHold(void);        // Position Hold button, not implemented 
         void PositionChange(void);      // Toggle target position button              
+        void RejectDisturbance(void);   // Compensate the disturbance
 
     ///////////////////////////
     // State Machine funcs (dont move for the moment :v )
@@ -125,6 +126,10 @@ class UDEdrone : public UavStateMachine {
         PushButton *positionHold;
         PushButton *positionChange;
         PushButton *togglePerturbation;
+        Vector3DSpinBox *targetPosition_layout;
+        Vector3DSpinBox *rejectionPercent_layout;
+        PushButton *rejectPerturbation;
+        Vector3DSpinBox *perturbation_layout;
         MetaVrpnObject *refVrpn;
         MetaVrpnObject *uavVrpn;
         flair::core::AhrsData *customReferenceOrientation;

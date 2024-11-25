@@ -3,40 +3,42 @@
 using namespace flair::core;
 
 UDEdrone::UDEdrone(TargetController *controller): UavStateMachine(controller), behaviourMode(BehaviourMode_t::Default), vrpnLost(false) {
+    perturbation = false;
     uav = GetUav();
     myLaw = new MyLaw(setupLawTab->At(1,0),"MyLaw");
 
     VrpnClient* vrpnclient=new VrpnClient("vrpn", uav->GetDefaultVrpnAddress(),80,uav->GetDefaultVrpnConnectionType());
     if(vrpnclient->ConnectionType()==VrpnClient::Xbee) {
         uavVrpn = new MetaVrpnObject(uav->ObjectName(),(uint8_t)0);
-        //refVrpn=new MetaVrpnObject("target",1);
     } else if (vrpnclient->ConnectionType()==VrpnClient::Vrpn) {
         uavVrpn = new MetaVrpnObject(uav->ObjectName());
-        //refVrpn = new MetaVrpnObject("target");
     } else if (vrpnclient->ConnectionType()==VrpnClient::VrpnLite) {
         uavVrpn = new MetaVrpnObject(uav->ObjectName());
-        //refVrpn=new MetaVrpnObject("target");
     }
     if(uav->GetType()=="mamboedu") {
       SetFailSafeAltitudeSensor(uavVrpn->GetAltitudeSensor());
     }
     getFrameworkManager()->AddDeviceToLog(uavVrpn);
-    //getFrameworkManager()->AddDeviceToLog(refVrpn);
     getFrameworkManager()->AddDeviceToLog(myLaw);
     vrpnclient->Start();
 
-    startTrajectory = new PushButton(GetButtonsLayout()->NewRow(),"Start2Point");
+    startTrajectory = new PushButton(GetButtonsLayout()->NewRow(),"Custom Control");
     stopTrajectory = new PushButton(GetButtonsLayout()->LastRowLastCol(),"Stop");
     positionHold = new PushButton(GetButtonsLayout()->LastRowLastCol(),"Hold (no jala aun)");
-    positionChange = new PushButton(GetButtonsLayout()->LastRowLastCol(),"Toggle Target");
+    positionChange = new PushButton(GetButtonsLayout()->LastRowLastCol(),"Change Target");
+    targetPosition_layout = new Vector3DSpinBox(GetButtonsLayout()->NewRow(),"Target Pos",-5,5,0.0001,6,Vector3Df(0.000000,0.000000,0.000000));
+    rejectionPercent_layout = new Vector3DSpinBox(GetButtonsLayout()->LastRowLastCol(),"Rejection",0,1,0.0001,6,Vector3Df(0.800000,0.800000,1.000000));
+    rejectPerturbation = new PushButton(GetButtonsLayout()->LastRowLastCol(),"Reject Disturbance");
+    perturbation_layout = new Vector3DSpinBox(GetButtonsLayout()->LastRowLastCol(),"Disurbance",-10,10,0.0001,6,Vector3Df(0.000000,0.000000,0.000000));
     togglePerturbation = new PushButton(GetButtonsLayout()->LastRowLastCol(),"Toggle Disturbance");
 
     customReferenceOrientation = new AhrsData(this,"reference");
     AddDataToControlLawLog(customReferenceOrientation);
     customOrientation = new AhrsData(this,"orientation");
 
-    currentTarget = Vector3Df(0,0,2);
-
+    flair::core::Vector3Df uav_p;
+    uavVrpn->GetPosition(uav_p);
+    currentTarget = Vector3Df(uav_p.x,uav_p.y,2);
 }
 
 UDEdrone::~UDEdrone() {
@@ -60,14 +62,6 @@ void UDEdrone::SignalEvent(Event_t event) {
 
 void UDEdrone::ExtraSecurityCheck(void) {
     if ((!vrpnLost) && ((behaviourMode==BehaviourMode_t::Trajectory) || (behaviourMode==BehaviourMode_t::PositionHold))) {
-      /*
-      if (!refVrpn->IsTracked(500)) {
-            Thread::Err("VRPN, target lost\n");
-            vrpnLost=true;
-            EnterFailSafeMode();
-            Land();
-        }
-       */
         if (!uavVrpn->IsTracked(500)) {
             Thread::Err("VRPN, uav lost\n");
             vrpnLost=true;
@@ -97,7 +91,8 @@ void UDEdrone::ExtraCheckPushButton(void) {
     if (togglePerturbation->Clicked()) {
         perturbation = !perturbation;
         if (perturbation) {
-            myLaw->SetPerturbation(Vector3Df(0.3, 0.3, 1.5), Vector3Df(0, 0, 0) * 0);
+            Vector3Df perturbationVec = flair::core::Vector3Df(perturbation_layout->Value().x, perturbation_layout->Value().y, perturbation_layout->Value().z);
+            myLaw->SetPerturbation(perturbationVec, Vector3Df(0, 0, 0));
         } else {
             myLaw->SetPerturbation(Vector3Df(0, 0, 0), Vector3Df(0, 0, 0));
         }
@@ -117,6 +112,11 @@ void UDEdrone::ExtraCheckPushButton(void) {
         #endif
         Thread::Info("\n\n\nDisturbancia aplicada \n\n\n\n");
     }
+    if (rejectPerturbation->Clicked())
+    {
+        RejectDisturbance();
+    }
+    
 }
 
 void UDEdrone::ExtraCheckJoystick(void) {
@@ -193,14 +193,19 @@ void UDEdrone::PositionHold(void) {
     Thread::Info("UDEdrone: holding position\n");
 }
 
-void UDEdrone::PositionChange() {
+void UDEdrone::PositionChange(void) {
+    /*
     const int numTargets = sizeof(targetPositions) / sizeof(targetPositions[0]);
     currentTargetIndex = (currentTargetIndex + 1) % numTargets;
     Thread::Info("\nPosition changed to next point in matrix.\n");
     currentTarget = targetPositions[currentTargetIndex];
+    */
+    currentTarget = flair::core::Vector3Df(targetPosition_layout->Value().x, targetPosition_layout->Value().y, targetPosition_layout->Value().z);
 }
 
-
+void UDEdrone::RejectDisturbance(void) {
+    myLaw->isDisturbanceActive = !myLaw->isDisturbanceActive;
+}
 
 /*******************************************************************************
  * Control Handlers
@@ -222,6 +227,7 @@ void UDEdrone::ApplyControl(){
     Vector3Df ref_p(0,0,0);
     Vector3Df uav_p,uav_dp; 
     Vector3Df aim_p, aim_dp;
+    Vector3Df rejectionPercent = flair::core::Vector3Df(rejectionPercent_layout->Value().x, rejectionPercent_layout->Value().y, rejectionPercent_layout->Value().z);
     Quaternion q = GetCurrentQuaternion();
     Vector3Df w;
     float yaw_ref;
@@ -230,13 +236,13 @@ void UDEdrone::ApplyControl(){
     aim_dp = Vector3Df(0,0,0);
     yawHold = 0;
 
-    //refVrpn->GetPosition(ref_p);
     uavVrpn->GetPosition(uav_p);
     uavVrpn->GetSpeed(uav_dp);
     GetDefaultOrientation()->GetQuaternionAndAngularRates(q, w);
     
     //Get position respect 2 the reference ninja
     uav_p = uav_p - ref_p;
+    
     CoordFrameCorrection(uav_p, uav_dp, w, aim_p);
 
     #ifdef POSE_LOG
@@ -257,6 +263,7 @@ void UDEdrone::ApplyControl(){
         Thread::Info(poseLogStream.str().c_str());
     #endif
 
+    myLaw->SetRejectionPercent(rejectionPercent);
     myLaw->SetTarget(aim_p, aim_dp);
     myLaw->UpdateDynamics(uav_p, uav_dp, q, w);
     myLaw->Update(GetTime());
@@ -269,7 +276,6 @@ void UDEdrone::ApplyControl(){
         }
     #endif
 }
-
 
 void UDEdrone::ComputeCustomTorques(Euler &torques) {
     ApplyControl();

@@ -12,6 +12,7 @@ MyLaw::MyLaw(const LayoutPosition* position, string name) : ControlLaw(position-
     isDisturbanceActive = false;
     activation_delay = 0.0f;
     this_time = 0;
+    rejectionPercent = Eigen::Vector3f(0,0,0);
 
     /************************
     Mutex for data access.
@@ -176,14 +177,16 @@ void MyLaw::UpdateFrom(const io_data *data) {
     dt = alt_dt.count();
     previous_chrono_time = current_time;
 
-    if (!isDisturbanceActive) {
-        this_time += dt;
-        std::cout << "time " << dt << "\n";
-        if (this_time >= activation_delay) {
-            isDisturbanceActive = true;
-            std::cout << "Disturbance estimator activated after " << activation_delay << " seconds\n";
+    #ifdef ACTIVATE_DISTURBANCE_REJECTION_BY_TIME
+        if (!isDisturbanceActive) {
+            this_time += dt;
+            std::cout << "time " << dt << "\n";
+            if (this_time >= activation_delay) {
+                isDisturbanceActive = true;
+                std::cout << "Disturbance estimator activated after " << activation_delay << " seconds\n";
+            }
         }
-    }
+    #endif
 
     #ifdef DT_LOG
         std::ostringstream dtLogStream;
@@ -287,6 +290,11 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
     if(!isDisturbanceActive){
         w_estimation_trans *= 0; 
         w_estimation_rot *= 0;
+
+        std::cout<<"nel"<<std::endl;
+    }
+    else {
+        std::cout<<"smn"<<std::endl;
     }
 
     /**************************************
@@ -320,7 +328,7 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
     float perturbed_Fu;
 
     #if OBSERVER_TYPE == UDE_OBSERVER
-        w_estimation_trans = Eigen::Vector3f(0.95 * w_estimation_trans.x(), 0.95 * w_estimation_trans.y(), w_estimation_trans.z());
+        w_estimation_trans = Eigen::Vector3f(rejectionPercent.x() * w_estimation_trans.x(), rejectionPercent.y() * w_estimation_trans.y(), rejectionPercent.z() * w_estimation_trans.z());
     #elif OBSERVER_TYPE == LUENBERGER_OBSERVER
         w_estimation_trans = Eigen::Vector3f(0.8 * -w_estimation_trans.x(), 0.8 * -w_estimation_trans.y(), w_estimation_trans.z());
     #endif
@@ -576,6 +584,10 @@ void MyLaw::SetTarget(Vector3Df target_pos, Vector3Df target_vel){
 void MyLaw::SetPerturbation(Vector3Df p_trans, Vector3Df p_rot){
     perturbation_trans = Eigen::Vector3f(p_trans.x, p_trans.y, p_trans.z);
     perturbation_rot = Eigen::Vector3f(p_rot.x, p_rot.y, p_rot.z);
+}
+
+void MyLaw::SetRejectionPercent(Vector3Df rejection){
+    rejectionPercent = Eigen::Vector3f(rejection.x, rejection.y, rejection.z);
 }
 
 } // end nasmespace filter
