@@ -9,7 +9,7 @@ int main() {
             63.577538e-6, 2102e-6, 0.286186e-6,
             -2.002648e-6, 0.286186e-6, 4068e-6;
     float dt = 0.01f;
-    int total_iterations = 1000;
+    int total_iterations = 4000;
 
     Drone drone(mass, J, dt);
     drone.kp_trans = Eigen::Vector3f(4,4,4);

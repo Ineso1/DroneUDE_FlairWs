@@ -48,7 +48,7 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, float dt) {
     if (u_thrust.norm() != 0) {
         u_thrust = sat_trans * tanh(u_thrust.norm() / sat_trans) * u_thrust.normalized();
     }
-    u_thrust += Eigen::Vector3f(0, 0, g * mass) - (kd_trans_2.array() * dp.array()).matrix() - w_estimation_trans;
+    u_thrust += Eigen::Vector3f(0, 0, g * mass) - (kd_trans_2.array() * dp.array()).matrix() - 0*w_estimation_trans;
     Fu = u_thrust.norm();
 
     // Rotation Control
@@ -65,7 +65,7 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, float dt) {
     if (u_torque.norm() != 0) {
         u_torque = sat_rot * tanh(u_torque.norm() / sat_rot) * u_torque.normalized().array() - kd_rot_2.array() * eomega.array();
     }
-    Tauu = J * u_torque + w_estimation_rot;
+    Tauu = J * u_torque + 0*w_estimation_rot;
     saveControlDataToCSV();
 }
 

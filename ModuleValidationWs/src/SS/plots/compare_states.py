@@ -153,3 +153,33 @@ plt.tight_layout(rect=[0, 0, 1, 0.96])
 plt.show()
 
 
+
+
+# Rotational disturbance estimation
+plt.figure("Luenberger Rotational Disturbance Estimation", figsize=(12, 8))
+plt.plot(rot_est['w_hat_x'], label='Disturbance w_hat_x')
+plt.plot(rot_est['w_hat_y'], label='Disturbance w_hat_y')
+plt.plot(rot_est['w_hat_z'], label='Disturbance w_hat_z')
+plt.legend()
+plt.title("Rotational Disturbance Estimation")
+plt.xlabel("Time Step")
+plt.ylabel("Disturbance")
+
+plt.tight_layout(rect=[0, 0, 1, 0.96])
+plt.grid()
+plt.show()
+
+
+# Rotational disturbance estimation
+plt.figure("Luenberger Translational Disturbance Estimation", figsize=(12, 8))
+plt.plot(trans_est['w_hat_x'], label='Disturbance w_hat_x')
+plt.plot(trans_est['w_hat_y'], label='Disturbance w_hat_y')
+plt.plot(trans_est['w_hat_z'], label='Disturbance w_hat_z')
+plt.legend()
+plt.title("Translational Disturbance Estimation")
+plt.xlabel("Time Step")
+plt.ylabel("Disturbance")
+
+plt.tight_layout(rect=[0, 0, 1, 0.96])
+plt.grid()
+plt.show()

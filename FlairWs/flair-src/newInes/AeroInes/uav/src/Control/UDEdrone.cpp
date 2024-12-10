@@ -39,6 +39,7 @@ UDEdrone::UDEdrone(TargetController *controller): UavStateMachine(controller), b
     AddDataToControlLawLog(customReferenceOrientation);
     customOrientation = new AhrsData(this,"orientation");
 
+    initQuaternion =  GetCurrentQuaternion();
     flair::core::Vector3Df uav_p;
     uavVrpn->GetPosition(uav_p);
     currentTarget = Vector3Df(uav_p.x,uav_p.y,2);
@@ -85,7 +86,7 @@ void UDEdrone::ExtraCheckPushButton(void) {
     }
     if(positionHold->Clicked()) {
         PositionHold();
-        Thread::Info("\n\n\nUDEdrone: Estate ahi \n\n\n\n");
+        Thread::Info("\n\n\nUDEdrone: Estate ahi \n\n\n\n");  
     }
     if(positionChange->Clicked()) {
         Thread::Info("\n\n\nApoco si jalo?? JAJAJ \n\n\n\n");
@@ -217,14 +218,30 @@ void UDEdrone::RejectDisturbance(void) {
 void UDEdrone::CoordFrameCorrection(Vector3Df &uav_p, Vector3Df &uav_dp, Vector3Df &w, Vector3Df &aim_p){
     // looks like the body frame is rotated somehow XD and the frame is rotated in x axis upside down
     Vector3Df correction_uav_p(uav_p.y, -uav_p.x,-uav_p.z);
-    Vector3Df correction_uav_dp(uav_dp.y, -uav_dp.x, uav_dp.z);
+    Vector3Df correction_uav_dp(uav_dp.y, -uav_dp.x, -uav_dp.z);
     Vector3Df correction_aim_p(aim_p.y, -aim_p.x, aim_p.z);
     uav_p = correction_uav_p;
     uav_dp = correction_uav_dp;
     aim_p = correction_aim_p;
     w.x *= -1;  // so we can handle positive rot_kd
-    uav_dp.z *= -1;
 }
+
+/*
+void UDEdrone::CoordFrameCorrection(Vector3Df& uav_p, Vector3Df& uav_dp, Vector3Df& w, Vector3Df& aim_p) {
+    // Apply 180° rotation about the x-axis
+    uav_p.y = -uav_p.y;
+    uav_p.z = -uav_p.z;
+
+    uav_dp.y = -uav_dp.y;
+    uav_dp.z = -uav_dp.z;
+
+    w.y = -w.y;
+    w.z = -w.z;
+
+    aim_p.y = -aim_p.y;
+    aim_p.z = -aim_p.z;
+}
+*/
 
 void UDEdrone::ApplyControl(){
     Vector3Df ref_p(0,0,0);
@@ -243,6 +260,17 @@ void UDEdrone::ApplyControl(){
     uavVrpn->GetSpeed(uav_dp);
     GetDefaultOrientation()->GetQuaternionAndAngularRates(q, w);
     
+    
+    // Desired quaternion for maintaining 90 degrees about the z-axis
+    float angle = M_PI / 2; // 90 degrees in radians
+    Quaternion q_90(std::cos(angle / 2), 0, 0, std::sin(angle / 2));
+    // Calculate the relative quaternion
+    Quaternion q_90_inv = q_90.GetConjugate(); // Conjugate of q_90
+    Quaternion q_relative = q * q_90_inv;   // q_relative = q_current * q_90^-1
+
+    // Remap the quaternion to treat q_relative as if it were (1, 0, 0, 0)
+    //q = q_relative;
+
     //Get position respect 2 the reference ninja
     uav_p = uav_p - ref_p;
     
@@ -286,6 +314,8 @@ void UDEdrone::ComputeCustomTorques(Euler &torques) {
     float pitch = myLaw->Output(1);
     float yaw = myLaw->Output(2);
     //Just 2 be sure nothing happen here
+    // roll gira en y
+    // pich gira en x
     torques.roll = std::isnan(roll) ? 0.0f : roll;
     torques.pitch = std::isnan(pitch) ? 0.0f : -pitch;
     torques.yaw = std::isnan(yaw) ? 0.0f : -yaw;
@@ -316,4 +346,8 @@ float UDEdrone::ComputeCustomThrust() {
 }
 
 
-
+Quaternion UDEdrone::Angle2Quaternion(float angle){
+    angle = M_PI / 2; // 90 grados en radianes importante
+    Quaternion q_z(std::cos(angle / 2), 0, 0, std::sin(angle / 2));
+    return q_z;
+}

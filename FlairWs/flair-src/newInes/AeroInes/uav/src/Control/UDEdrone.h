@@ -77,6 +77,7 @@ class UDEdrone : public UavStateMachine {
         };
         flair::core::Vector3Df posHold;
         float yawHold;
+        Quaternion initQuaternion;
 
     ///////////////////////////
     // Feedback objects
@@ -118,7 +119,7 @@ class UDEdrone : public UavStateMachine {
         float ComputeCustomThrust(void) override;                           // Set custom thrust
         void ComputeCustomTorques(flair::core::Euler &torques) override;    // Set custom torques
         void CoordFrameCorrection(Vector3Df&, Vector3Df&, Vector3Df&,Vector3Df&);   // Frame correction
-        
+        Quaternion Angle2Quaternion(float angle);
         
         MyLaw * myLaw;
         PushButton *startTrajectory;
