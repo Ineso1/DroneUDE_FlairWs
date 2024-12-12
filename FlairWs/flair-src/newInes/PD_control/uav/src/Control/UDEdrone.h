@@ -77,6 +77,7 @@ class UDEdrone : public UavStateMachine {
         };
         flair::core::Vector3Df posHold;
         float yawHold;
+        float yawAngle;
         Quaternion initQuaternion;
 
     ///////////////////////////
@@ -129,6 +130,7 @@ class UDEdrone : public UavStateMachine {
         PushButton *positionChange;
         PushButton *togglePerturbation;
         Vector3DSpinBox *targetPosition_layout;
+        DoubleSpinBox *yawAngle_layout;
         Vector3DSpinBox *rejectionPercent_layout;
         PushButton *rejectPerturbation;
         Vector3DSpinBox *perturbation_layout;

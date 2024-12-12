@@ -46,6 +46,7 @@ MyLaw::MyLaw(const LayoutPosition* position, string name) : ControlLaw(position-
     desc->SetElementName(20,0,"udeRx");
     desc->SetElementName(21,0,"udeRy");
     desc->SetElementName(22,0,"udeRz");
+
     dataexp = new Matrix(this,desc,floatType,name);
     delete desc;
     AddDataToLog(dataexp);
@@ -87,6 +88,7 @@ MyLaw::MyLaw(const LayoutPosition* position, string name) : ControlLaw(position-
     Quaternion errorc
     ************************/
     eq = Eigen::Quaternionf(1,0,0,0);
+    qz = Eigen::Quaternionf(1,0,0,0);
     perturbation_trans = Eigen::Vector3f(0,0,0);
     perturbation_rot = Eigen::Vector3f(0,0,0);
 
@@ -230,6 +232,7 @@ void MyLaw::UpdateFrom(const io_data *data) {
     stateM(20, 0) = input->ValueNoMutex(20, 0);
     stateM(21, 0) = input->ValueNoMutex(21, 0);
     stateM(22, 0) = input->ValueNoMutex(22, 0);
+
     input->ReleaseMutex();
 
     /**************************************
@@ -291,15 +294,14 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
     /**************************************
         Errors
     **************************************/
-    
-    //Eigen::Vector3f ep = p_d.array() - p.array();
-
-
     //Convercion de coords inerciales para el error del body frame
     Eigen::Vector3f ep_inertial = p_d - p; // Position error in inertial frame
     Eigen::Vector3f edp_inertial = dp;
+
+
     Eigen::Vector3f ep_body = q.conjugate() * ep_inertial; // Transform error to body frame
     Eigen::Vector3f edp_body = q.conjugate() * edp_inertial;
+    
 
     Eigen::Vector3f ep = ep_body;
     dp = edp_body;
@@ -351,6 +353,8 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
     Eigen::Quaternionf q_temp(dot_product, cross_product.x(), cross_product.y(), cross_product.z());
     Eigen::Quaternionf q_d = ExpQuaternion(Eigen::Quaternionf(0.5f * LogQuaternion(q_temp).coeffs()));    
     q_d.normalize();
+    q_d = q_d * qz;
+
     Eigen::Quaternionf eq_prev = eq;
     eq = q * q_d.conjugate();   
     eq.normalize(); 
@@ -430,6 +434,7 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
     dataexp->SetValue(20,0, 0);
     dataexp->SetValue(21,0, 0);
     dataexp->SetValue(22,0, 0);
+
     dataexp->ReleaseMutex();
 
     outputMatrix(0, 0) = Tauu.x();
@@ -567,8 +572,9 @@ void MyLaw::UpdateDynamics(Vector3Df p, Vector3Df dp, Quaternion q,Vector3Df w){
     input->SetValue(19,0,dp.z);
 };
 
-void MyLaw::SetTarget(Vector3Df target_pos, Vector3Df target_vel){
+void MyLaw::SetTarget(Vector3Df target_pos, Vector3Df target_vel, Quaternion target_yaw){
     p_d = Eigen::Vector3f(target_pos.x, target_pos.y, target_pos.z);
+    qz = Eigen::Quaternionf(target_yaw.q0, target_yaw.q1, target_yaw.q2, target_yaw.q3);
 }
 
 void MyLaw::SetPerturbation(Vector3Df p_trans, Vector3Df p_rot){

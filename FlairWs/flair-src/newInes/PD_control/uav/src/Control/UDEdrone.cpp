@@ -30,6 +30,7 @@ UDEdrone::UDEdrone(TargetController *controller): UavStateMachine(controller), b
     positionHold = new PushButton(GetButtonsLayout()->LastRowLastCol(),"Hold (no jala aun)");
     positionChange = new PushButton(GetButtonsLayout()->LastRowLastCol(),"Change Target");
     targetPosition_layout = new Vector3DSpinBox(GetButtonsLayout()->NewRow(),"Target Pos",-5,5,0.0001,6,Vector3Df(0.000000,0.000000,0.000000));
+    yawAngle_layout = new DoubleSpinBox(GetButtonsLayout()->LastRowLastCol(),"Yaw euler",-180,180,0.0001,10,0);
     rejectionPercent_layout = new Vector3DSpinBox(GetButtonsLayout()->LastRowLastCol(),"Rejection",0,1,0.0001,6,Vector3Df(0.800000,0.800000,1.000000));
     rejectPerturbation = new PushButton(GetButtonsLayout()->LastRowLastCol(),"Reject Disturbance");
     perturbation_layout = new Vector3DSpinBox(GetButtonsLayout()->LastRowLastCol(),"Disurbance",-10,10,0.0001,6,Vector3Df(0.000000,0.000000,0.000000));
@@ -233,7 +234,10 @@ void UDEdrone::ApplyControl(){
     Vector3Df rejectionPercent = flair::core::Vector3Df(rejectionPercent_layout->Value().x, rejectionPercent_layout->Value().y, rejectionPercent_layout->Value().z);
     Quaternion q = GetCurrentQuaternion();
     Vector3Df w;
-    float yaw_ref;
+    yawAngle = yawAngle_layout->Value();
+    float yawAngleInRadians = yawAngle * M_PI / 180.0;
+    Quaternion aim_yaw(std::cos(yawAngleInRadians / 2), 0, 0, std::sin(yawAngleInRadians / 2));
+    aim_yaw.Normalize();
 
     aim_p = currentTarget;
     aim_dp = Vector3Df(0,0,0);
@@ -242,28 +246,24 @@ void UDEdrone::ApplyControl(){
     uavVrpn->GetPosition(uav_p);
     uavVrpn->GetSpeed(uav_dp);
 
-    // GetDefaultOrientation()->GetQuaternionAndAngularRates(q, w);
     MixOrientation();
     q =	mixQuaternion;
 	w = mixAngSpeed;
-    
-    std::cout<<"q\t"<<q.q0<<"\t"<<q.q1<<"\t"<<q.q2<<"\t"<<q.q3<<std::endl;
-    std::cout<<"w\t"<<w.x<<"\t"<<w.y<<"\t"<<w.z<<std::endl;
-    
-
-    // Desired quaternion for maintaining 90 degrees about the z-axis
-    float angle = M_PI / 2; // 90 degrees in radians
-    Quaternion q_90(std::cos(angle / 2), 0, 0, std::sin(angle / 2));
-    // Calculate the relative quaternion
-    Quaternion q_90_inv = q_90.GetConjugate(); // Conjugate of q_90
-    Quaternion q_relative = q * q_90_inv;   // q_relative = q_current * q_90^-1
-
-    // Remap the quaternion to treat q_relative as if it were (1, 0, 0, 0)
-    //q = q_relative;
 
     //Get position respect 2 the reference ninja
     uav_p = uav_p - ref_p;
-    
+    Quaternion qze = aim_yaw.GetConjugate()*q;
+    Vector3Df thetaze = 2*qze.GetLogarithm();
+    float zsign = 1;
+    if (thetaze.GetNorm()>=3.1416){
+        printf("Reference is too far!! %f \n",thetaze.GetNorm());
+        zsign = -1;
+    }
+    aim_yaw = zsign*aim_yaw;
+
+    std::cout<<"qz before\t"<< aim_yaw.q0 << "\t"<< aim_yaw.q1 << "\t" << aim_yaw.q2 << "\t"<< aim_yaw.q3 << "\t";
+    std::cout<<"angle "<< yawAngle << "\n";
+
     CoordFrameCorrection(uav_p, uav_dp, w, aim_p);
 
     #ifdef POSE_LOG
@@ -285,7 +285,7 @@ void UDEdrone::ApplyControl(){
     #endif
 
     myLaw->SetRejectionPercent(rejectionPercent);
-    myLaw->SetTarget(aim_p, aim_dp);
+    myLaw->SetTarget(aim_p, aim_dp, aim_yaw);
     myLaw->UpdateDynamics(uav_p, uav_dp, q, w);
     myLaw->Update(GetTime());
 

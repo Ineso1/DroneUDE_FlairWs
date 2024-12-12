@@ -109,6 +109,7 @@ namespace filter {
     ///////////////////////////
 
             Eigen::Quaternionf eq;  // Error quaternion
+            Eigen::Quaternionf qz;  // z rotation quaternion
             Eigen::Vector3f p_d;    // Desire position
 
     ///////////////////////////
@@ -177,7 +178,7 @@ namespace filter {
     // SETTERS
     ///////////////////////////
 
-            void SetTarget(Vector3Df, Vector3Df);
+            void SetTarget(Vector3Df, Vector3Df, Quaternion);
             void SetPerturbation(Vector3Df, Vector3Df);
             void SetRejectionPercent(Vector3Df);
 
