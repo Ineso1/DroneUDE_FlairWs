@@ -261,8 +261,8 @@ void UDEdrone::ApplyControl(){
     }
     aim_yaw = zsign*aim_yaw;
 
-    std::cout<<"qz before\t"<< aim_yaw.q0 << "\t"<< aim_yaw.q1 << "\t" << aim_yaw.q2 << "\t"<< aim_yaw.q3 << "\t";
-    std::cout<<"angle "<< yawAngle << "\n";
+    //std::cout<<"qz before\t"<< aim_yaw.q0 << "\t"<< aim_yaw.q1 << "\t" << aim_yaw.q2 << "\t"<< aim_yaw.q3 << "\t";
+    //std::cout<<"angle "<< yawAngle << "\n";
 
     CoordFrameCorrection(uav_p, uav_dp, w, aim_p);
 

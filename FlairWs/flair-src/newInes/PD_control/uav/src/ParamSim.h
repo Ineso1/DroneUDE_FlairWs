@@ -26,7 +26,7 @@
 *********************/
 //#define POSE_LOG
 //#define DT_LOG
-#define MY_LAW_DEBUG_LOG
+//#define MY_LAW_DEBUG_LOG
 //#define ERROR_LOG
 //#define PERTURBANCE_LOG 
 

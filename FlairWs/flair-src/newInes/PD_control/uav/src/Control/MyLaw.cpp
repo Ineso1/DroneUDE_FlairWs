@@ -353,7 +353,7 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
     Eigen::Quaternionf q_temp(dot_product, cross_product.x(), cross_product.y(), cross_product.z());
     Eigen::Quaternionf q_d = ExpQuaternion(Eigen::Quaternionf(0.5f * LogQuaternion(q_temp).coeffs()));    
     q_d.normalize();
-    q_d = q_d * qz;
+    //q_d = q_d * qz;
 
     Eigen::Quaternionf eq_prev = eq;
     eq = q * q_d.conjugate();   
