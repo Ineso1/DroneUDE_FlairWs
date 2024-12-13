@@ -17,7 +17,8 @@ add_subdirectory(src/Observer)
 
 SET(SRC_FILES
     src/main.cpp
-    src/Control/UDEdrone.cpp
+    src/Control/Drone.cpp
+    src/Control/DroneBase.cpp
     src/Control/MyLaw.cpp
     src/Observer/StateSpace.cpp
     src/Observer/ObserverBase.cpp

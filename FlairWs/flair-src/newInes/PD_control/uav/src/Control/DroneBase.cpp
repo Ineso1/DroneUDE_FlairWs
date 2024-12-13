@@ -1,0 +1,163 @@
+// DroneBase.cpp
+#include "DroneBase.h"
+
+DroneBase::DroneBase(TargetController *controller) : UavStateMachine(controller), vrpnLost(false), behaviourMode(BehaviourMode_t::Default) {
+    uav = GetUav();
+    
+    customLawTab = new Tab(getFrameworkManager()->GetTabWidget(), "Custom Law");
+    execLayout = new GridLayout(customLawTab->NewRow(), "Custom Law Layout");
+    startTrajectory = new PushButton(GetButtonsLayout()->NewRow(), "Custom Control");
+    stopTrajectory = new PushButton(GetButtonsLayout()->LastRowLastCol(), "Stop");
+    positionHold = new PushButton(GetButtonsLayout()->LastRowLastCol(), "Hold (not implemented yet)");
+    positionChange = new PushButton(GetButtonsLayout()->LastRowLastCol(), "Change Target");
+    targetPosition_layout = new Vector3DSpinBox(GetButtonsLayout()->NewRow(), "Target Pos", -5, 5, 0.0001, 6, Vector3Df(0.0, 0.0, 0.0));
+    yawAngle_layout = new DoubleSpinBox(GetButtonsLayout()->LastRowLastCol(), "Yaw Euler", -180, 180, 0.0001, 10, 0);
+    rejectionPercent_layout = new Vector3DSpinBox(GetButtonsLayout()->LastRowLastCol(), "Rejection", 0, 1, 0.0001, 6, Vector3Df(0.8, 0.8, 1.0));
+    rejectPerturbation = new PushButton(GetButtonsLayout()->LastRowLastCol(), "Reject Disturbance");
+    perturbation_layout = new Vector3DSpinBox(GetButtonsLayout()->LastRowLastCol(), "Disturbance", -10, 10, 0.0001, 6, Vector3Df(0.0, 0.0, 0.0));
+    togglePerturbation = new PushButton(GetButtonsLayout()->LastRowLastCol(), "Toggle Disturbance");
+
+    VrpnClient* vrpnclient = new VrpnClient("vrpn", uav->GetDefaultVrpnAddress(), 80, uav->GetDefaultVrpnConnectionType());
+    if (vrpnclient->ConnectionType() == VrpnClient::Xbee) {
+        uavVrpn = new MetaVrpnObject(uav->ObjectName(), static_cast<uint8_t>(0));
+    } else if (vrpnclient->ConnectionType() == VrpnClient::Vrpn) {
+        uavVrpn = new MetaVrpnObject(uav->ObjectName());
+    } else if (vrpnclient->ConnectionType() == VrpnClient::VrpnLite) {
+        uavVrpn = new MetaVrpnObject(uav->ObjectName());
+    }
+    if (uav->GetType() == "mamboedu") {
+        SetFailSafeAltitudeSensor(uavVrpn->GetAltitudeSensor());
+    }
+    getFrameworkManager()->AddDeviceToLog(uavVrpn);
+    vrpnclient->Start();
+}
+
+DroneBase::~DroneBase() {
+}
+
+void DroneBase::SignalEvent(Event_t event) {
+    UavStateMachine::SignalEvent(event);
+    switch (event) {
+    case Event_t::TakingOff:
+        behaviourMode = BehaviourMode_t::Default;
+        vrpnLost = false;
+        break;
+    case Event_t::EnteringControlLoop:
+        behaviourMode = BehaviourMode_t::Trajectory;
+        break;
+    case Event_t::EnteringFailSafeMode:
+        behaviourMode = BehaviourMode_t::Default;
+        break;
+    }
+}
+
+void DroneBase::ExtraSecurityCheck() {
+    if (!vrpnLost && (behaviourMode == BehaviourMode_t::Trajectory || behaviourMode == BehaviourMode_t::PositionHold)) {
+        if (!uavVrpn->IsTracked(500)) {
+            Thread::Err("VRPN, UAV lost\n");
+            vrpnLost = true;
+            EnterFailSafeMode();
+            Land();
+        }
+    }
+}
+
+void DroneBase::ExtraCheckPushButton() {
+    if (startTrajectory->Clicked()) {
+        StartTrajectory();
+    }
+    if (stopTrajectory->Clicked()) {
+        StopTrajectory();
+    }
+    if (positionHold->Clicked()) {
+        PositionHold();
+    }
+    if (positionChange->Clicked()) {
+        PositionChange();
+    }
+    if (togglePerturbation->Clicked()) {
+        HandleDisturbanceToggle();
+    }
+    if (rejectPerturbation->Clicked())
+    {
+        RejectDisturbance();
+    }
+}
+
+void DroneBase::ExtraCheckJoystick() {
+    if(GetTargetController()->ButtonClicked(4) && GetTargetController()->IsButtonPressed(9)) {
+        StartTrajectory();
+    }
+
+    //R1 and Cross
+    if(GetTargetController()->ButtonClicked(5) && GetTargetController()->IsButtonPressed(9)) {
+        StopTrajectory();
+    }
+    
+    //R1 and Square
+    if(GetTargetController()->ButtonClicked(2) && GetTargetController()->IsButtonPressed(9)) {
+        PositionHold();
+    }
+}
+
+
+void DroneBase::StopTrajectory(void) {
+    if( behaviourMode!=BehaviourMode_t::Default) {
+        SetThrustMode(ThrustMode_t::Default);
+        SetTorqueMode(TorqueMode_t::Default);
+        Thread::Warn("DroneBase: not in Trajectory mode\n");
+        return;
+    }
+    Thread::Info("UDEdrone: StopTrajectory\n");
+}
+
+void DroneBase::PositionHold(void) {
+    if( behaviourMode!=BehaviourMode_t::Default) {
+        SetThrustMode(ThrustMode_t::Default);
+        SetTorqueMode(TorqueMode_t::Default);
+        Thread::Warn("DroneBase: not in Trajectory mode\n");
+        return;
+    }
+    Thread::Info("UDEdrone: StopTrajectory\n");
+}
+
+void DroneBase::StartTrajectory() {
+    if( behaviourMode == BehaviourMode_t::Trajectory) {
+        Thread::Warn("UDEdrone: already in this mode\n");
+    }
+    if (SetOrientationMode(OrientationMode_t::Manual)) {
+        Thread::Info("esta vaina: start \n");
+    } else {
+        Thread::Warn("esta vaina: could not start otra vez \n");
+        return;
+    }
+
+    if (SetThrustMode(ThrustMode_t::Custom)) {
+        Thread::Info("UDEdrone: Custom Thrust Mode Set\n");
+    } else {
+        Thread::Warn("UDEdrone: Failed to set Custom Thrust Mode\n");
+    }
+
+    if (SetTorqueMode(TorqueMode_t::Custom)) {
+        Thread::Info("UDEdrone: Custom Torque Mode Set\n");
+    } else {
+        Thread::Warn("UDEdrone: Failed to set Custom Torque Mode\n");
+    }
+    ApplyControl();
+}
+
+void DroneBase::PositionChange(void) {
+    std::cout << "Need to override this" << std::endl;
+}
+
+void DroneBase::HandleDisturbanceToggle() {
+    std::cout << "Need to override this" << std::endl;
+}
+
+void DroneBase::RejectDisturbance() {
+    std::cout << "Need to override this" << std::endl;
+}
+
+void DroneBase::ApplyControl(void){
+    std::cout << "Need to override this" << std::endl;
+}

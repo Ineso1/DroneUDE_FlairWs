@@ -11,7 +11,7 @@
 //
 /*********************************************************************/
 
-#include "Control/UDEdrone.h"
+#include "Control/Drone.h"
 #include <UavFactory.h>
 #include <FrameworkManager.h>
 #include <stdio.h>
@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
 
     Uav* drone=CreateUav(name,uav_type);
     TargetEthController *controller=new TargetEthController("Dualshock3",ds3port);
-    UDEdrone* demo=new UDEdrone(controller);
+    Drone* demo=new Drone(controller);
 
     demo->Start();
     demo->Join();
