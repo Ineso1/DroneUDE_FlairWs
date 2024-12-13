@@ -6,6 +6,8 @@ SET(FLAIR_USE_SENSOR_ACTUATOR TRUE)
 SET(FLAIR_USE_META TRUE)
 SET(FLAIR_USE_VRPN TRUE)
 
+add_definitions(-DEIGEN_DONT_ALIGN_STATICALLY)
+
 
 include_directories("/usr/include/eigen3")
 include_directories($ENV{FLAIR_ROOT}/flair-src/include)

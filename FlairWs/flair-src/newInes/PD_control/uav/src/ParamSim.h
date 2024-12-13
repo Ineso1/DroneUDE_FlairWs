@@ -52,7 +52,7 @@
 #define SAVE_UDE_TRANS_DEBUG_FILE_PATH_CSV  "/home/nessy/Documents/SimDataCSV/DebugUDE_trans.csv"
 #define SAVE_UDE_ROT_DEBUG_FILE_PATH_CSV    "/home/nessy/Documents/SimDataCSV/DebugUDE_rot.csv"
 
-#define COMPARE_STATE__REAL_OBSERVER
+//#define COMPARE_STATE__REAL_OBSERVER
 
 #ifdef COMPARE_STATE__REAL_OBSERVER
     #ifndef SAVE_REAL_STATE_SPACE_CSV
