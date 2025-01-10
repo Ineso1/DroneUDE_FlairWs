@@ -38,6 +38,14 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, float dt) {
     #if OBSERVER_TYPE == LUENBERGER_OBSERVER
         w_estimation_trans = Eigen::Vector3f(0.7 * w_estimation_trans.x(), 0.7 * w_estimation_trans.y(), w_estimation_trans.z());
     #endif
+
+    #if OBSERVER_TYPE == SLIDINGMODE_OBSERVER
+        w_estimation_trans = Eigen::Vector3f(0.7 * w_estimation_trans.x(), 0.7 * w_estimation_trans.y(), w_estimation_trans.z());
+    #endif
+
+    #if OBSERVER_TYPE == SUPERTWIST_OBSERVER
+        w_estimation_trans = Eigen::Vector3f(0.7 * w_estimation_trans.x(), 0.7 * w_estimation_trans.y(), w_estimation_trans.z());
+    #endif
     
     // Errors
     Eigen::Vector3f ep = p_d - p;

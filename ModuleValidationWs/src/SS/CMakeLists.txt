@@ -14,6 +14,8 @@ add_executable(
     Observer/ObserverBase.cpp
     Observer/UDE/UDE.cpp
     Observer/Luenberger/Luenberger.cpp
+    Observer/SlidingMode/SlidingMode.cpp
+    Observer/SuperTwist/SuperTwist.cpp
 )
 
 target_link_libraries(
