@@ -22,6 +22,8 @@ KFC::KFC()
 
     firstUpdate = true;
 
+    std::cout << "The filter is filtering ( -_•)▄︻テحكـ━一 (21) \n";
+
     initialize();
 }
 
@@ -70,7 +72,6 @@ void KFC::KFC_estimate(const Eigen::Vector3f &p, const Eigen::Vector3f &dp, cons
 
 void KFC::getState(Eigen::Vector3f &p, Eigen::Vector3f &dp) const
 {
-    std::cout << "The filter is filtering ( -_•)▄︻テحكـ━一";
     p = Xk.head<3>();
     dp = Xk.tail<3>();
 }
