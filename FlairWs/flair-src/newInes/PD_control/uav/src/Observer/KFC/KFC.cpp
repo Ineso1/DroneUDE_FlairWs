@@ -33,6 +33,7 @@ void KFC::resetKFC() {
 
 void KFC::KFC_estimate(const Eigen::Vector3f &p, const Eigen::Vector3f &dp, const Eigen::Vector3f &u_thrust)
 {
+    
     Eigen::VectorXf X(6);
     X.head<3>() = p;
     X.tail<3>() = dp;
@@ -69,6 +70,7 @@ void KFC::KFC_estimate(const Eigen::Vector3f &p, const Eigen::Vector3f &dp, cons
 
 void KFC::getState(Eigen::Vector3f &p, Eigen::Vector3f &dp) const
 {
+    std::cout << "The filter is filtering ( -_•)▄︻テحكـ━一";
     p = Xk.head<3>();
     dp = Xk.tail<3>();
 }
