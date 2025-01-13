@@ -28,6 +28,7 @@ SET(SRC_FILES
     src/Observer/Luenberger/Luenberger.cpp
     src/Observer/SlidingMode/SlidingMode.cpp
     src/Observer/SuperTwist/SuperTwist.cpp
+    src/Observer/KFC/KFC.cpp
 )
 
 FLAIR_DEMO(${PROJECT_NAME} "${SRC_FILES}"
