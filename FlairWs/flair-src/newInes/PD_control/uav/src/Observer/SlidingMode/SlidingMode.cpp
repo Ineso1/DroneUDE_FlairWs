@@ -4,11 +4,11 @@
 namespace Observer {
 
 SlidingMode::SlidingMode() {
-    L_trans = 4.0f;
-    L_rot = 4.0f;
+    L_trans = 0.01f;
+    L_rot = 5.0f;
 
-    epsilon_trans = 0.1f;
-    epsilon_rot = 0.1f;
+    epsilon_trans = 0.0001f;
+    epsilon_rot = 0.0001f;
 
     tau_trans = 0.9f;
     tau_rot = 0.9f;
@@ -16,10 +16,10 @@ SlidingMode::SlidingMode() {
     rho_trans = L_trans + epsilon_trans;
     rho_rot = L_rot + epsilon_rot;
 
-    c_p_trans = 1.0f;
-    c_dp_trans = 1.2f;
-    c_q_rot = 1.0f;
-    c_omega_rot = 1.0f;
+    c_p_trans = 0.001f;
+    c_dp_trans = 0.001f;
+    c_q_rot = 0.1f;
+    c_omega_rot = 0.1f;
 
     d_est_filtered_trans = Eigen::Vector3f::Zero();
     d_est_filtered_rot = Eigen::Vector3f::Zero();
@@ -63,12 +63,13 @@ Eigen::Vector3f SlidingMode::EstimateDisturbance_trans(const Eigen::Vector3f& p,
 }
 
 Eigen::Vector3f SlidingMode::EstimateDisturbance_rot(const Eigen::Quaternionf& q, const Eigen::Vector3f& omega, float dt) {
-    Eigen::Vector3f q_vec = q.vec();
+    Eigen::Vector3f u_torque_SM = u_torque - omega.cross(J * omega);
+    Eigen::Vector3f q_vec = rotvec(q);
     Eigen::Vector3f e_q = q_vec - x_rot.segment<3>(0);
     Eigen::Vector3f e_omega = omega - x_rot.segment<3>(3);
     Eigen::Vector3f s = c_q_rot * e_q + c_omega_rot * e_omega;
     Eigen::Vector3f omega_sm = rho_rot * s.array().sign();
-    Eigen::VectorXf dx_hat = A_rot * x_rot + B_rot * u_torque + B_rot * omega_sm;
+    Eigen::VectorXf dx_hat = A_rot * x_rot + B_rot * u_torque_SM + B_rot * omega_sm;
     x_rot += dt * dx_hat;
     d_est_filtered_rot += (1 / tau_rot) * (-d_est_filtered_rot + omega_sm) * dt;
     w_hat_rot = d_est_filtered_rot;

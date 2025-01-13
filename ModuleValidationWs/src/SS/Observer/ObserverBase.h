@@ -54,6 +54,8 @@ public:
 
     virtual Eigen::Vector3f EstimateDisturbance_trans(const Eigen::Vector3f& p, const Eigen::Vector3f& dp, float dt);
     virtual Eigen::Vector3f EstimateDisturbance_rot(const Eigen::Quaternionf& q, const Eigen::Vector3f& omega, float dt);
+
+    Eigen::Vector3f rotvec(const Eigen::Quaternionf&);
     
 protected:
     void initialize();

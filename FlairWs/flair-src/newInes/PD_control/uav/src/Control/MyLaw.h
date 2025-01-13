@@ -28,6 +28,8 @@
 #include <iomanip>
 #include "../Observer/UDE/UDE.h"
 #include "../Observer/Luenberger/Luenberger.h"
+#include "../Observer/SlidingMode/SlidingMode.h"
+#include "../Observer/SuperTwist/SuperTwist.h"
 
 
 using namespace std;
@@ -48,8 +50,10 @@ namespace filter {
         public Observer::UDE
     #elif OBSERVER_TYPE == LUENBERGER_OBSERVER
         public Observer::Luenberger
-    #elif OBSERVER_TYPE == SUPERTWISTING_OBSERVER
-        public Observer::SuperTwisting
+    #elif OBSERVER_TYPE == SUPERTWIST_OBSERVER
+        public Observer::SuperTwist
+    #elif OBSERVER_TYPE == SLIDINGMODE_OBSERVER
+        public Observer::SlidingMode
     #else
         public Observer::ObserverBase // Default 
     #endif

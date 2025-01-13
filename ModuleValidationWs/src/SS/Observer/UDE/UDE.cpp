@@ -55,9 +55,10 @@ Eigen::Vector3f UDE::EstimateDisturbance_trans(const Eigen::Vector3f& p, const E
 }
 
 Eigen::Vector3f UDE::EstimateDisturbance_rot(const Eigen::Quaternionf& q, const Eigen::Vector3f& omega, float dt) {
-    Eigen::Vector3f u_torque_UDE = J * u_torque;
+    Eigen::Vector3f u_torque_UDE = u_torque - omega.cross(J * omega);
     x_rot = Eigen::VectorXf(6);
-    x_rot << q.vec(), omega;
+    Eigen::Vector3f q_rvec = rotvec(q);
+    x_rot << q_rvec, omega;
     if (firstIteration_rot)
     {
         xi_UDE_rot = -Omega_UDE_rot * (B_pinv_rot * x_rot);

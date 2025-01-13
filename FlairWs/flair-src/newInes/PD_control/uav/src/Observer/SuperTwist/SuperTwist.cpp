@@ -3,8 +3,8 @@
 namespace Observer {
 
 SuperTwist::SuperTwist() {
-    L_trans = 4.0f;
-    L_rot = 4.0f;
+    L_trans = 5.0f;
+    L_rot = 0.05f;
 
     lambda0_trans = 1.5f * std::sqrt(L_trans);
     lambda1_trans = 1.1f * L_trans;
@@ -15,9 +15,9 @@ SuperTwist::SuperTwist() {
     eta_rot = Eigen::Vector3f::Zero();
 
     c_p_trans = 1.0f;
-    c_dp_trans = 1.2f;
-    c_q_rot = 1.0f;
-    c_omega_rot = 1.0f;
+    c_dp_trans = 0.9f;
+    c_q_rot = 0.05f;
+    c_omega_rot = 0.01f;
 
     x_trans = Eigen::VectorXf::Zero(6);
     x_rot = Eigen::VectorXf::Zero(6);
@@ -58,14 +58,15 @@ Eigen::Vector3f SuperTwist::EstimateDisturbance_trans(const Eigen::Vector3f& p, 
 }
 
 Eigen::Vector3f SuperTwist::EstimateDisturbance_rot(const Eigen::Quaternionf& q, const Eigen::Vector3f& omega, float dt) {
-    Eigen::Vector3f q_vec = q.vec();
+    Eigen::Vector3f u_torque_ST = u_torque - omega.cross(J * omega);
+    Eigen::Vector3f q_vec = rotvec(q);
     Eigen::Vector3f e_q = q_vec - x_rot.segment<3>(0);
     Eigen::Vector3f e_omega = omega - x_rot.segment<3>(3);
     Eigen::Vector3f s = c_q_rot * e_q + c_omega_rot * e_omega;
     Eigen::Vector3f omega_st = lambda0_rot * s.cwiseAbs().cwiseSqrt().cwiseProduct(s.cwiseSign()) + eta_rot;
     Eigen::Vector3f deta = lambda1_rot * s.cwiseSign();
     eta_rot += dt * deta;
-    Eigen::VectorXf dx_hat = A_rot * x_rot + B_rot * u_torque + B_rot * omega_st;
+    Eigen::VectorXf dx_hat = A_rot * x_rot + B_rot * u_torque_ST + B_rot * omega_st;
     x_rot += dt * dx_hat;
     w_hat_rot = omega_st;
     SaveStateEstimationCSV(x_rot, dx_hat, w_hat_rot, "RotationalEstimation.csv");

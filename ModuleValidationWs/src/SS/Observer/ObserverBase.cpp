@@ -113,6 +113,18 @@ Eigen::Vector3f ObserverBase::EstimateDisturbance_trans(const Eigen::Vector3f& p
 Eigen::Vector3f ObserverBase::EstimateDisturbance_rot(const Eigen::Quaternionf& q, const Eigen::Vector3f& omega, float dt){
 }
 
+Eigen::Vector3f ObserverBase::rotvec(const Eigen::Quaternionf &quat) {
+    double w = quat.w();
+    double x = quat.x();
+    double y = quat.y();
+    double z = quat.z();
+    double norm = std::sqrt(x * x + y * y + z * z);
+    if (norm < 1e-6) {
+        return Eigen::Vector3f::Zero();
+    }
+    double theta = 2 * std::atan2(norm, w);
+    return theta * Eigen::Vector3f(x / norm, y / norm, z / norm);
+}
 
 
 } // namespace Observer

@@ -105,10 +105,12 @@ Eigen::Vector3f Luenberger::EstimateDisturbance_trans(const Eigen::Vector3f& p, 
 
 
 Eigen::Vector3f Luenberger::EstimateDisturbance_rot(const Eigen::Quaternionf& q, const Eigen::Vector3f& omega, float dt) {
+    Eigen::Vector3f u_torque_L = u_torque - omega.cross(J * omega);
     Eigen::VectorXf x_r(12);
-    x_r << q.vec(), omega, Eigen::VectorXf::Zero(6);
+    Eigen::Vector3f q_rvec = rotvec(q);
+    x_r << q_rvec, omega, Eigen::VectorXf::Zero(6);
     Eigen::Vector3f y = C_ext_rot * x_r;
-    Eigen::VectorXf dx_hat = A_ext_rot * x_rot + B_ext_rot * u_torque + L_rot * (y - C_ext_rot * x_rot);
+    Eigen::VectorXf dx_hat = A_ext_rot * x_rot + B_ext_rot * u_torque_L + L_rot * (y - C_ext_rot * x_rot);
     x_rot += dt * dx_hat;
     Eigen::Vector3f disturbance_estimate = x_rot.segment<3>(6);
     SaveStateEstimationCSV(x_rot, dx_hat, disturbance_estimate, "RotationalEstimation.csv");
