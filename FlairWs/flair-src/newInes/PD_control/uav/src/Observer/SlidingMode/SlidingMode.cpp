@@ -4,8 +4,8 @@
 namespace Observer {
 
 SlidingMode::SlidingMode() {
-    L_trans = 0.01f;
-    L_rot = 5.0f;
+    L_trans = 1.0f;
+    L_rot = 0.1f;
 
     epsilon_trans = 0.0001f;
     epsilon_rot = 0.0001f;
@@ -16,8 +16,8 @@ SlidingMode::SlidingMode() {
     rho_trans = L_trans + epsilon_trans;
     rho_rot = L_rot + epsilon_rot;
 
-    c_p_trans = 0.001f;
-    c_dp_trans = 0.001f;
+    c_p_trans = 0.1f;
+    c_dp_trans = 0.12f;
     c_q_rot = 0.1f;
     c_omega_rot = 0.1f;
 

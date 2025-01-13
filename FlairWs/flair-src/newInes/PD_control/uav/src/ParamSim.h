@@ -23,7 +23,6 @@
 // #define OBSERVER_TYPE LUENBERGER_OBSERVER
 
 
-
 /*********************
     LOG
 *********************/
