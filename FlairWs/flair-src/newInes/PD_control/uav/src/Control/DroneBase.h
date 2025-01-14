@@ -21,6 +21,9 @@
 #include <PidThrust.h>
 #include <Vector3DSpinBox.h>
 #include <DoubleSpinBox.h>
+#include <ComboBox.h>
+#include <GroupBox.h>
+#include <Label.h>
 #include <iostream>
 
 using namespace std;
@@ -39,21 +42,36 @@ public:
 
 protected:
     enum class BehaviourMode_t { Default, PositionHold, Trajectory };
+    // enum class BehaviourMode_t { Default, PositionControl, TrajectoryFollower };
     BehaviourMode_t behaviourMode;
 
     // UI Buttons
     Tab *customLawTab;
+    GroupBox* positionBehaveBox;
+    GroupBox* disturbanceEstimator;
+    GroupBox *disturbanceSim;
+    GroupBox *kalmanActivation;
+
     GridLayout* execLayout;
     PushButton *startTrajectory;
     PushButton *stopTrajectory; 
     PushButton *positionHold;
     PushButton *positionChange;
     PushButton *togglePerturbation;
+    PushButton *toggleKalman;
     Vector3DSpinBox *targetPosition_layout;
     DoubleSpinBox *yawAngle_layout;
     Vector3DSpinBox *rejectionPercent_layout;
     PushButton *rejectPerturbation;
     Vector3DSpinBox *perturbation_layout;
+
+    ComboBox *beahviourMode_layout;
+    ComboBox *observerMode_layout;
+
+    Label *disturbanceModeState;
+    Label *rejectionModeState;
+    Label *kalmanActivationState;
+
     MetaVrpnObject *uavVrpn;
 
     // Methods
@@ -65,6 +83,7 @@ protected:
     virtual void ApplyControl(void);
     virtual void PositionChange(void);
     virtual void RejectDisturbance(void);
+    virtual void ApplyKalman(void);
 
     // State Machine Functions
     void SignalEvent(Event_t event) override;

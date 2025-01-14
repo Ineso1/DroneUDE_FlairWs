@@ -31,7 +31,11 @@ public:
 
 protected:
     // Perturbation Toggle
+    enum class ObserverMode_t { UDE, Luenberger, SuperTwist, SlidingMode };
+    enum class AlgorithmBehaviourMode_t {PositionPoint, TrajectoryFollow};
+
     bool perturbation;
+    bool kalman;
 
     // Feedback objects
     flair::core::Vector3Df vrpnPosition;
@@ -48,6 +52,7 @@ protected:
     void ApplyControl(void) override;
     void PositionChange() override;
     void RejectDisturbance(void) override;
+    void ApplyKalman(void) override;
 
     float ComputeCustomThrust() override;
     void ComputeCustomTorques(flair::core::Euler &torques) override;

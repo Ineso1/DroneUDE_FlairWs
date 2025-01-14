@@ -6,16 +6,44 @@ DroneBase::DroneBase(TargetController *controller) : UavStateMachine(controller)
     
     customLawTab = new Tab(getFrameworkManager()->GetTabWidget(), "Custom Law");
     execLayout = new GridLayout(customLawTab->NewRow(), "Custom Law Layout");
-    startTrajectory = new PushButton(GetButtonsLayout()->NewRow(), "Custom Control");
+
+    beahviourMode_layout = new ComboBox(GetButtonsLayout()->NewRow(),"Select behavior");
+    beahviourMode_layout->AddItem("Position");
+    beahviourMode_layout->AddItem("Trajectory");
+
+    startTrajectory = new PushButton(GetButtonsLayout()->LastRowLastCol(), "Start Slected Behaiour");
     stopTrajectory = new PushButton(GetButtonsLayout()->LastRowLastCol(), "Stop");
     positionHold = new PushButton(GetButtonsLayout()->LastRowLastCol(), "Hold (not implemented yet)");
-    positionChange = new PushButton(GetButtonsLayout()->LastRowLastCol(), "Change Target");
-    targetPosition_layout = new Vector3DSpinBox(GetButtonsLayout()->NewRow(), "Target Pos", -5, 5, 0.0001, 6, Vector3Df(0.0, 0.0, 0.0));
-    yawAngle_layout = new DoubleSpinBox(GetButtonsLayout()->LastRowLastCol(), "Yaw Euler", -180, 180, 0.0001, 10, 0);
-    rejectionPercent_layout = new Vector3DSpinBox(GetButtonsLayout()->LastRowLastCol(), "Rejection", 0, 1, 0.0001, 6, Vector3Df(0.8, 0.8, 1.0));
-    rejectPerturbation = new PushButton(GetButtonsLayout()->LastRowLastCol(), "Reject Disturbance");
-    perturbation_layout = new Vector3DSpinBox(GetButtonsLayout()->LastRowLastCol(), "Disturbance", -10, 10, 0.0001, 6, Vector3Df(0.0, 0.0, 0.0));
-    togglePerturbation = new PushButton(GetButtonsLayout()->LastRowLastCol(), "Toggle Disturbance");
+
+    positionBehaveBox = new GroupBox(GetButtonsLayout()->NewRow(),"Pos");
+    targetPosition_layout = new Vector3DSpinBox(positionBehaveBox->NewRow(), "Target Pos", -5, 5, 0.0001, 6, Vector3Df(0.0, 0.0, 0.0));
+    yawAngle_layout = new DoubleSpinBox(positionBehaveBox->NewRow(), "Yaw Euler", -180, 180, 0.0001, 10, 0);
+    positionChange = new PushButton(positionBehaveBox->NewRow(), "Change Target");
+
+    disturbanceEstimator = new GroupBox(GetButtonsLayout()->LastRowLastCol(),"DistEst");
+    observerMode_layout = new ComboBox(disturbanceEstimator->NewRow(),"Select observer");
+    observerMode_layout->AddItem("Luenberger");
+    observerMode_layout->AddItem("UDE");
+    observerMode_layout->AddItem("SlidingMode");
+    observerMode_layout->AddItem("SuperTwisting");
+    rejectionPercent_layout = new Vector3DSpinBox(disturbanceEstimator->NewRow(), "Rejection", 0, 1, 0.0001, 6, Vector3Df(0.8, 0.8, 1.0));
+    rejectionModeState = new Label(disturbanceEstimator->NewRow(), "state");
+    rejectionModeState->SetText("state: ----- off");
+    Label *someSpace_1 = new Label(disturbanceEstimator->NewRow(), "space");
+    rejectPerturbation = new PushButton(disturbanceEstimator->NewRow(), "Reject Disturbance");
+    
+    disturbanceSim = new GroupBox(GetButtonsLayout()->LastRowLastCol(),"DistSim");
+    perturbation_layout = new Vector3DSpinBox(disturbanceSim->NewRow(), "Disturbance", -10, 10, 0.0001, 6, Vector3Df(0.0, 0.0, 0.0));
+    Label *someSpace_2 = new Label(disturbanceEstimator->NewRow(), "space");
+    disturbanceModeState = new Label(disturbanceSim->NewRow(), "state");
+    disturbanceModeState->SetText("state: ----- off");
+    togglePerturbation = new PushButton(disturbanceSim->NewRow(), "Toggle Disturbance");
+
+    kalmanActivation = new GroupBox(GetButtonsLayout()->LastRowLastCol(),"Kalman Filter");
+    kalmanActivationState = new Label(kalmanActivation->NewRow(), "space");
+    kalmanActivationState->SetText("state: ----- off");
+    toggleKalman = new PushButton(kalmanActivation->NewRow(), "Toggle Kalman Activation");
+
 
     VrpnClient* vrpnclient = new VrpnClient("vrpn", uav->GetDefaultVrpnAddress(), 80, uav->GetDefaultVrpnConnectionType());
     if (vrpnclient->ConnectionType() == VrpnClient::Xbee) {
@@ -81,6 +109,10 @@ void DroneBase::ExtraCheckPushButton() {
     if (rejectPerturbation->Clicked())
     {
         RejectDisturbance();
+    }
+    if (toggleKalman->Clicked())
+    {
+        ApplyKalman();
     }
 }
 
@@ -159,5 +191,9 @@ void DroneBase::RejectDisturbance() {
 }
 
 void DroneBase::ApplyControl(void){
+    std::cout << "Need to override this" << std::endl;
+}
+
+void DroneBase::ApplyKalman(void){
     std::cout << "Need to override this" << std::endl;
 }

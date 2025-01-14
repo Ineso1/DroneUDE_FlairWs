@@ -27,8 +27,10 @@ void Drone::HandleDisturbanceToggle() {
     if (perturbation) {
         Vector3Df perturbationVec = flair::core::Vector3Df(perturbation_layout->Value().x, perturbation_layout->Value().y, perturbation_layout->Value().z);
         myLaw->SetPerturbation(perturbationVec, Vector3Df(0, 0, 0));
+        disturbanceModeState->SetText("state: on +++++");
     } else {
         myLaw->SetPerturbation(Vector3Df(0, 0, 0), Vector3Df(0, 0, 0));
+        disturbanceModeState->SetText("state: ----- off");
     }
 
     #ifdef PERTURBANCE_LOG
@@ -49,6 +51,22 @@ void Drone::HandleDisturbanceToggle() {
 
 void Drone::RejectDisturbance() {
     myLaw->isDisturbanceActive = !myLaw->isDisturbanceActive;
+    if(myLaw->isDisturbanceActive){
+        rejectionModeState->SetText("state: on +++++");
+    }
+    else{
+        rejectionModeState->SetText("state: ----- off");
+    }
+}
+
+void Drone::ApplyKalman() {
+    kalman = !kalman;
+    if(kalman){
+        kalmanActivationState->SetText("state: on +++++");
+    }
+    else{
+        kalmanActivationState->SetText("state: ----- off");
+    }
 }
 
 void Drone::ApplyControl() {
