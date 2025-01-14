@@ -1,4 +1,5 @@
 #include "MyLaw.h"
+#include "Gaussian_noise.h"
 
 namespace flair
 {
@@ -313,7 +314,10 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
     **************************************/
     //Convercion de coords inerciales para el error del body frame
     if(isKalmanActive){
-        kalmanFilter.KFC_estimate(p, dp, u_thrust);
+        // Crear instancia del generador de ruido.
+        GaussianNoise noiseGenerator(0.0, 0.1, -1, 1);
+        Eigen::Vector3f p_noise = p + noiseGenerator.generateNoise();
+        kalmanFilter.KFC_estimate(p_noise, dp, u_thrust);
         kalmanFilter.getState(p, dp);
     }
     Eigen::Vector3f ep_inertial = p_d - p; // Position error in inertial frame
