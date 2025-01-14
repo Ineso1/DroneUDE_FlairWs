@@ -7,9 +7,11 @@ namespace filter
 	
 MyLaw::MyLaw(const LayoutPosition* position, string name) : ControlLaw(position->getLayout(), name, 4) {
        
+    observerMode = ObserverMode_t::UDE;
     previous_chrono_time = std::chrono::high_resolution_clock::now();
     firstUpdate = true;
     isDisturbanceActive = false;
+    isKalmanActive = false;
     activation_delay = 0.0f;
     this_time = 0;
     rejectionPercent = Eigen::Vector3f(0,0,0);
@@ -310,6 +312,10 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
         Errors
     **************************************/
     //Convercion de coords inerciales para el error del body frame
+    if(isKalmanActive){
+        kalmanFilter.KFC_estimate(p, dp, u_thrust);
+        kalmanFilter.getState(p, dp);
+    }
     Eigen::Vector3f ep_inertial = p_d - p; // Position error in inertial frame
     Eigen::Vector3f edp_inertial = dp;
 

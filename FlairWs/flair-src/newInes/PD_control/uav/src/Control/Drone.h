@@ -30,10 +30,10 @@ public:
     virtual ~Drone();
 
 protected:
-    // Perturbation Toggle
-    enum class ObserverMode_t { UDE, Luenberger, SuperTwist, SlidingMode };
     enum class AlgorithmBehaviourMode_t {PositionPoint, TrajectoryFollow};
+    AlgorithmBehaviourMode_t algorithmBehaviourMode;
 
+    // Perturbation Toggle
     bool perturbation;
     bool kalman;
 
@@ -47,17 +47,26 @@ protected:
     // Control Law
     MyLaw *myLaw;
 
-    // Control functions
-    void HandleDisturbanceToggle(void) override;
-    void ApplyControl(void) override;
+    // Buttons handlers
     void PositionChange() override;
-    void RejectDisturbance(void) override;
+    void HandleDisturbanceToggle(void) override;
     void ApplyKalman(void) override;
+    void RejectDisturbance(void) override;
 
+    // Control behave
+    void ApplyControl(void) override;
+
+    // Correction Functions
+    void CoordFrameCorrection(Vector3Df &uav_p, Vector3Df &uav_dp, Vector3Df &w, Vector3Df &aim_p);
+    void MixOrientation(void);
+
+    // Control inputs
     float ComputeCustomThrust() override;
     void ComputeCustomTorques(flair::core::Euler &torques) override;
-    void CoordFrameCorrection(Vector3Df &uav_p, Vector3Df &uav_dp, Vector3Df &w, Vector3Df &aim_p);
-    void MixOrientation();
+
+    // Control behave algorithm functions
+    void PositionControl(void);
+    void TargetFollowControl(void);
 
 private:
     Quaternion mixQuaternion;

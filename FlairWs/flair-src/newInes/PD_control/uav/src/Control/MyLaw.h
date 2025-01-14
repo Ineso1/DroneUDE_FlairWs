@@ -26,6 +26,7 @@
 #include <iostream>
 #include <chrono>
 #include <iomanip>
+#include "../Observer/KFC/KFC.h"
 #include "../Observer/UDE/UDE.h"
 #include "../Observer/Luenberger/Luenberger.h"
 #include "../Observer/SlidingMode/SlidingMode.h"
@@ -60,8 +61,14 @@ namespace filter {
     {
         public:
 
+        enum class ObserverMode_t { UDE, Luenberger, SuperTwist, SlidingMode };
+        ObserverMode_t observerMode;
+
+        Observer::KFC kalmanFilter;
+
         string something2stream;
         bool isDisturbanceActive; // Flag for disturbance activation
+        bool isKalmanActive;
         float activation_delay;   // Delay time for disturbance activation 
         float this_time;
 

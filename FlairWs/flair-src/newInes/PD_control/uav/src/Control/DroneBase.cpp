@@ -22,10 +22,10 @@ DroneBase::DroneBase(TargetController *controller) : UavStateMachine(controller)
 
     disturbanceEstimator = new GroupBox(GetButtonsLayout()->LastRowLastCol(),"DistEst");
     observerMode_layout = new ComboBox(disturbanceEstimator->NewRow(),"Select observer");
-    observerMode_layout->AddItem("Luenberger");
     observerMode_layout->AddItem("UDE");
-    observerMode_layout->AddItem("SlidingMode");
+    observerMode_layout->AddItem("Luenberger");
     observerMode_layout->AddItem("SuperTwisting");
+    observerMode_layout->AddItem("SlidingMode");
     rejectionPercent_layout = new Vector3DSpinBox(disturbanceEstimator->NewRow(), "Rejection", 0, 1, 0.0001, 6, Vector3Df(0.8, 0.8, 1.0));
     rejectionModeState = new Label(disturbanceEstimator->NewRow(), "state");
     rejectionModeState->SetText("state: ----- off");

@@ -2,10 +2,19 @@
 #include "Drone.h"
 
 Drone::Drone(TargetController *controller) : DroneBase(controller) {
+    
+    //Behave
+    algorithmBehaviourMode = AlgorithmBehaviourMode_t::PositionPoint;
+
+    // Toggle variables
+    kalman = false;
     perturbation = false;
+    
+    // Law instance
     myLaw = new MyLaw(execLayout->At(1, 0), "MyLaw");
     getFrameworkManager()->AddDeviceToLog(myLaw);
 
+    // Set Zero Orientation 
     initQuaternion =  GetCurrentQuaternion();
 
     // Set current position target
@@ -18,8 +27,14 @@ Drone::~Drone() {
     delete myLaw;
 }
 
+/***************************************** 
+ * Buttons Handlers
+*****************************************/
+
 void Drone::PositionChange(void) {
-    currentTarget = flair::core::Vector3Df(targetPosition_layout->Value().x, targetPosition_layout->Value().y, targetPosition_layout->Value().z);
+    if(algorithmBehaviourMode == AlgorithmBehaviourMode_t::PositionPoint){
+        currentTarget = flair::core::Vector3Df(targetPosition_layout->Value().x, targetPosition_layout->Value().y, targetPosition_layout->Value().z);
+    }
 }
 
 void Drone::HandleDisturbanceToggle() {
@@ -32,21 +47,6 @@ void Drone::HandleDisturbanceToggle() {
         myLaw->SetPerturbation(Vector3Df(0, 0, 0), Vector3Df(0, 0, 0));
         disturbanceModeState->SetText("state: ----- off");
     }
-
-    #ifdef PERTURBANCE_LOG
-        std::ostringstream logStream;
-        logStream << "\n\nTranslational Perturbation: (\t" 
-                << myLaw->perturbation_trans.x() << ",\t"
-                << myLaw->perturbation_trans.y() << ",\t"
-                << myLaw->perturbation_trans.z() << "\t)\n"
-                << "Rotational Perturbation: (\t"
-                << myLaw->perturbation_rot.x() << ",\t"
-                << myLaw->perturbation_rot.y() << ",\t"
-                << myLaw->perturbation_rot.z() << "\t)\n\n";
-        
-        Thread::Info(logStream.str().c_str());
-    #endif
-    Thread::Info("\n\n\nDisturbancia aplicada \n\n\n\n");
 }
 
 void Drone::RejectDisturbance() {
@@ -61,6 +61,7 @@ void Drone::RejectDisturbance() {
 
 void Drone::ApplyKalman() {
     kalman = !kalman;
+    myLaw->isKalmanActive = kalman;
     if(kalman){
         kalmanActivationState->SetText("state: on +++++");
     }
@@ -69,7 +70,99 @@ void Drone::ApplyKalman() {
     }
 }
 
+/***************************************** 
+ * Control behave
+*****************************************/
+
 void Drone::ApplyControl() {
+
+    switch(observerMode_layout->CurrentIndex()){
+        case 0:
+            myLaw->observerMode = MyLaw::ObserverMode_t::UDE;
+            break;
+        case 1:
+            myLaw->observerMode = MyLaw::ObserverMode_t::Luenberger;
+            break;
+        case 2:
+            myLaw->observerMode = MyLaw::ObserverMode_t::SuperTwist;
+            break;
+        case 3:
+            myLaw->observerMode = MyLaw::ObserverMode_t::SlidingMode;
+            break;
+    }
+
+    switch(beahviourMode_layout->CurrentIndex()){
+        case 0:
+            PositionControl();
+            break;
+        case 1:
+            TargetFollowControl();
+            break;
+    }
+}
+
+/***************************************** 
+ * Correction Functions
+*****************************************/
+
+void Drone::CoordFrameCorrection(Vector3Df &uav_p, Vector3Df &uav_dp, Vector3Df &w, Vector3Df &aim_p) {
+    Vector3Df correction_uav_p(-uav_p.x, -uav_p.y, -uav_p.z);
+    Vector3Df correction_uav_dp(-uav_dp.x, -uav_dp.y, -uav_dp.z);
+    Vector3Df correction_aim_p(-aim_p.x, -aim_p.y, aim_p.z);
+    uav_p = correction_uav_p;
+    uav_dp = correction_uav_dp;
+    aim_p = correction_aim_p;
+    w.x *= -1;
+}
+
+void Drone::MixOrientation() {
+    Quaternion ahrsQuaternion;
+    Vector3Df ahrsAngularSpeed;
+    GetDefaultOrientation()->GetQuaternionAndAngularRates(ahrsQuaternion, ahrsAngularSpeed);
+
+    if (first_up) {
+        Quaternion vrpnQuaternion;
+        uavVrpn->GetQuaternion(vrpnQuaternion);
+        Euler vrpnEuler;
+        vrpnQuaternion.ToEuler(vrpnEuler);
+        vrpnQuaternion.q0 = std::cos(vrpnEuler.yaw / 2);
+        vrpnQuaternion.q1 = 0;
+        vrpnQuaternion.q2 = 0;
+        vrpnQuaternion.q3 = std::sin(vrpnEuler.yaw / 2);
+        vrpnQuaternion.Normalize();
+        qI = vrpnQuaternion * ahrsQuaternion.GetConjugate();
+        first_up = false;
+    }
+
+    mixQuaternion = qI * ahrsQuaternion;
+    mixQuaternion.Normalize();
+    mixAngSpeed = ahrsAngularSpeed;
+}
+
+/***************************************** 
+ * Control inputs
+*****************************************/
+
+float Drone::ComputeCustomThrust() {
+    float thrust = myLaw->Output(3); 
+    return std::isnan(thrust) ? 0.0f : -thrust;
+}
+
+void Drone::ComputeCustomTorques(Euler &torques) {
+    ApplyControl();
+    float roll = myLaw->Output(0);
+    float pitch = myLaw->Output(1);
+    float yaw = myLaw->Output(2);
+    torques.roll = std::isnan(roll) ? 0.0f : roll;
+    torques.pitch = std::isnan(pitch) ? 0.0f : -pitch;
+    torques.yaw = std::isnan(yaw) ? 0.0f : -yaw;
+}
+
+/***************************************** 
+ * Control behave algorithm functions
+*****************************************/
+
+void Drone::PositionControl(){
     Vector3Df ref_p(0, 0, 0);
     Vector3Df uav_p, uav_dp; 
     Vector3Df aim_p, aim_dp;
@@ -108,51 +201,6 @@ void Drone::ApplyControl() {
     myLaw->Update(GetTime());
 }
 
-float Drone::ComputeCustomThrust() {
-    float thrust = myLaw->Output(3); 
-    return std::isnan(thrust) ? 0.0f : -thrust;
-}
-
-void Drone::ComputeCustomTorques(Euler &torques) {
-    ApplyControl();
-    float roll = myLaw->Output(0);
-    float pitch = myLaw->Output(1);
-    float yaw = myLaw->Output(2);
-    torques.roll = std::isnan(roll) ? 0.0f : roll;
-    torques.pitch = std::isnan(pitch) ? 0.0f : -pitch;
-    torques.yaw = std::isnan(yaw) ? 0.0f : -yaw;
-}
-
-void Drone::CoordFrameCorrection(Vector3Df &uav_p, Vector3Df &uav_dp, Vector3Df &w, Vector3Df &aim_p) {
-    Vector3Df correction_uav_p(-uav_p.x, -uav_p.y, -uav_p.z);
-    Vector3Df correction_uav_dp(-uav_dp.x, -uav_dp.y, -uav_dp.z);
-    Vector3Df correction_aim_p(-aim_p.x, -aim_p.y, aim_p.z);
-    uav_p = correction_uav_p;
-    uav_dp = correction_uav_dp;
-    aim_p = correction_aim_p;
-    w.x *= -1;
-}
-
-void Drone::MixOrientation() {
-    Quaternion ahrsQuaternion;
-    Vector3Df ahrsAngularSpeed;
-    GetDefaultOrientation()->GetQuaternionAndAngularRates(ahrsQuaternion, ahrsAngularSpeed);
-
-    if (first_up) {
-        Quaternion vrpnQuaternion;
-        uavVrpn->GetQuaternion(vrpnQuaternion);
-        Euler vrpnEuler;
-        vrpnQuaternion.ToEuler(vrpnEuler);
-        vrpnQuaternion.q0 = std::cos(vrpnEuler.yaw / 2);
-        vrpnQuaternion.q1 = 0;
-        vrpnQuaternion.q2 = 0;
-        vrpnQuaternion.q3 = std::sin(vrpnEuler.yaw / 2);
-        vrpnQuaternion.Normalize();
-        qI = vrpnQuaternion * ahrsQuaternion.GetConjugate();
-        first_up = false;
-    }
-
-    mixQuaternion = qI * ahrsQuaternion;
-    mixQuaternion.Normalize();
-    mixAngSpeed = ahrsAngularSpeed;
+void Drone::TargetFollowControl(){
+    
 }

@@ -90,6 +90,7 @@ protected:
     void ExtraSecurityCheck(void) override;
     void ExtraCheckPushButton(void) override;
     void ExtraCheckJoystick(void) override;
+
 };
 
 #endif // DRONEBASE_H
