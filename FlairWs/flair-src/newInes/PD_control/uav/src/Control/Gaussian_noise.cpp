@@ -4,9 +4,7 @@
 #include "iostream"
 
 GaussianNoise::GaussianNoise(float meanValue, float stdDev, float rangeMin, float rangeMax)
-    : meanValue(meanValue), stdDev(stdDev), rangeMin(rangeMin), rangeMax(rangeMax) {
-    std::cout << "Se ha generado el ruido gaussiano\n  ( ◡̀_◡́)ᕤ\n\U0001f514\n";
-    }
+    : meanValue(meanValue), stdDev(stdDev), rangeMin(rangeMin), rangeMax(rangeMax) {}
 
 float GaussianNoise::generateSingleNoise() {
     std::random_device rd; // Semilla aleatoria.
