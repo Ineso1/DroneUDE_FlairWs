@@ -22,6 +22,7 @@ SET(SRC_FILES
     src/Control/Drone.cpp
     src/Control/DroneBase.cpp
     src/Control/MyLaw.cpp
+    src/Control/Trayectory.cpp
     src/Observer/StateSpace.cpp
     src/Observer/ObserverBase.cpp
     src/Observer/UDE/UDE.cpp
