@@ -202,5 +202,40 @@ void Drone::PositionControl(){
 }
 
 void Drone::TargetFollowControl(){
-    
+    Vector3Df ref_p(0, 0, 0);
+    Vector3Df uav_p, uav_dp; 
+    Vector3Df aim_p, aim_dp;
+    Vector3Df rejectionPercent = flair::core::Vector3Df(rejectionPercent_layout->Value().x, rejectionPercent_layout->Value().y, rejectionPercent_layout->Value().z);
+    Quaternion q = GetCurrentQuaternion();
+    Vector3Df w;
+    yawAngle = yawAngle_layout->Value();
+    float yawAngleInRadians = yawAngle * M_PI / 180.0;
+    Quaternion aim_yaw(std::cos(yawAngleInRadians / 2), 0, 0, std::sin(yawAngleInRadians / 2));
+    aim_yaw.Normalize();
+
+    aim_p = currentTarget;
+    aim_dp = Vector3Df(0, 0, 0);
+
+    uavVrpn->GetPosition(uav_p);
+    uavVrpn->GetSpeed(uav_dp);
+
+    MixOrientation();
+    q = mixQuaternion;
+    w = mixAngSpeed;
+
+    uav_p = uav_p - ref_p;
+    Quaternion qze = aim_yaw.GetConjugate() * q;
+    Vector3Df thetaze = 2 * qze.GetLogarithm();
+    float zsign = 1;
+    if (thetaze.GetNorm() >= 3.1416) {
+        zsign = -1;
+    }
+    aim_yaw = zsign * aim_yaw;
+
+    CoordFrameCorrection(uav_p, uav_dp, w, aim_p);
+
+    myLaw->SetRejectionPercent(rejectionPercent);
+    myLaw->SetTarget(aim_p, aim_dp, aim_yaw);
+    myLaw->UpdateDynamics(uav_p, uav_dp, q, w);
+    myLaw->Update(GetTime());
 }

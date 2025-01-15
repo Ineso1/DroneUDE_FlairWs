@@ -74,7 +74,7 @@ void KFC::KFC_estimate(const Eigen::Vector3f &p, const Eigen::Vector3f &dp, cons
         //std::cout << "MAMA ESCUCHO BORROSO!\nMissing data: using model prediction" << std::endl;
     } else {
         Qk = Eigen::MatrixXf::Identity(6, 6) * 1.5;
-        Rk = Eigen::MatrixXf::Identity(6, 6) * 35;
+        Rk = Eigen::MatrixXf::Identity(6, 6) * 25;
         //std::cout << "ia sirbo\n" << std::endl;
     }
 
@@ -101,6 +101,9 @@ void KFC::KFC_estimate(const Eigen::Vector3f &p, const Eigen::Vector3f &dp, cons
     if (outputFile2.is_open()) {
         outputFile2 << Xk.head<3>().x() << "," << Xk.head<3>().y() << "," << Xk.head<3>().z() << std::endl; // Escribir los datos filtrados
     }
+
+    outputFile1.close();
+    outputFile2.close();
 }
 
 void KFC::getState(Eigen::Vector3f &p, Eigen::Vector3f &dp) const
