@@ -157,13 +157,12 @@ void DroneBase::StartTrajectory() {
     if( behaviourMode == BehaviourMode_t::Trajectory) {
         Thread::Warn("UDEdrone: already in this mode\n");
     }
-    if (SetOrientationMode(OrientationMode_t::Manual)) {
-        Thread::Info("esta vaina: start \n");
-    } else {
-        Thread::Warn("esta vaina: could not start otra vez \n");
-        return;
-    }
-
+    // if (SetOrientationMode(OrientationMode_t::Manual)) {
+    //     Thread::Info("esta vaina: start \n");
+    // } else {
+    //     Thread::Warn("esta vaina: could not start otra vez \n");
+    //     return;
+    // }
     if (SetThrustMode(ThrustMode_t::Custom)) {
         Thread::Info("UDEdrone: Custom Thrust Mode Set\n");
     } else {

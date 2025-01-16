@@ -165,17 +165,17 @@ void MyLaw::UpdateFrom(const io_data *data) {
         something2stream = startLogStream.str();
     }
      
-    #if OBSERVER_TYPE == UDE_OBSERVER
-        Observer::UDE::Omega_UDE_trans = (Eigen::Matrix3f() << 
+    if(observerMode == MyLaw::ObserverMode_t::UDE){
+        ude.Omega_UDE_trans = (Eigen::Matrix3f() << 
                                             omega_gains_trans->Value().x, 0.0f, 0.0f,
                                             0.0f, omega_gains_trans->Value().y, 0.0f,
                                             0.0f, 0.0f, omega_gains_trans->Value().z).finished();
 
-        Observer::UDE::Omega_UDE_rot = (Eigen::Matrix3f() << 
+        ude.Omega_UDE_rot = (Eigen::Matrix3f() << 
                                             omega_gains_rot->Value().x, 0.0f, 0.0f,
                                             0.0f, omega_gains_rot->Value().y, 0.0f,
                                             0.0f, 0.0f, omega_gains_rot->Value().z).finished();
-    #endif
+    }
 
     motorK = motorConst->Value();
     
@@ -289,20 +289,41 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
     Eigen::Vector3f p(stateM(14, 0), stateM(15, 0), stateM(16, 0));
     Eigen::Vector3f dp(stateM(17, 0), stateM(18, 0), stateM(19, 0));
     Eigen::Vector3f ddp(stateM(20, 0), stateM(21, 0), stateM(22, 0));
+    Eigen::Vector3f w_estimation_trans;
+    Eigen::Vector3f w_estimation_rot;
 
     if(firstUpdate){
         dt = 0;
     }
 
-    Eigen::Vector3f w_estimation_trans = EstimateDisturbance_trans(p, dp, dt);
-    Eigen::Vector3f w_estimation_rot = EstimateDisturbance_rot(q, w, dt);
+    if(observerMode == MyLaw::ObserverMode_t::UDE){
+        ude.u_thrust = u_thrust;
+        ude.u_torque = u_torque;
+        w_estimation_trans = ude.EstimateDisturbance_trans(p, dp, dt);
+        w_estimation_rot = ude.EstimateDisturbance_rot(q, omega, dt);
+    } else if(observerMode == MyLaw::ObserverMode_t::Luenberger){
+        luenberger.u_thrust = u_thrust;
+        luenberger.u_torque = u_torque;
+        w_estimation_trans = luenberger.EstimateDisturbance_trans(p, dp, dt);
+        w_estimation_rot = luenberger.EstimateDisturbance_rot(q, omega, dt);
+    } else if(observerMode == MyLaw::ObserverMode_t::SuperTwist){
+        superTwist.u_thrust = u_thrust;
+        superTwist.u_torque = u_torque;
+        w_estimation_trans = superTwist.EstimateDisturbance_trans(p, dp, dt);
+        w_estimation_rot = superTwist.EstimateDisturbance_rot(q, omega, dt);
+    }else if(observerMode == MyLaw::ObserverMode_t::SlidingMode){
+        slidingMode.u_thrust = u_thrust;
+        slidingMode.u_torque = u_torque;
+        w_estimation_trans = slidingMode.EstimateDisturbance_trans(p, dp, dt);
+        w_estimation_rot = slidingMode.EstimateDisturbance_rot(q, omega, dt);
+    }
 
-    #if OBSERVER_TYPE == UDE_OBSERVER
-        if(w_estimation_trans.norm() > 7){
-            resetUDE();
+    if(observerMode == MyLaw::ObserverMode_t::UDE){
+        if(w_estimation_trans.norm() > 30){
+            ude.resetUDE();
             std::cout<<"quieto"<<std::endl;
         }
-    #endif
+    }
 
     if(!isDisturbanceActive){
         w_estimation_trans *= 0; 
@@ -355,15 +376,7 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
     Eigen::Vector3f perturbed_u_thrust;
     float perturbed_Fu;
 
-    #if OBSERVER_TYPE == UDE_OBSERVER
-        w_estimation_trans = Eigen::Vector3f(rejectionPercent.x() * w_estimation_trans.x(), rejectionPercent.y() * w_estimation_trans.y(), rejectionPercent.z() * w_estimation_trans.z());
-    #elif OBSERVER_TYPE == LUENBERGER_OBSERVER
-        w_estimation_trans = Eigen::Vector3f(rejectionPercent.x() * w_estimation_trans.x(), rejectionPercent.y() * w_estimation_trans.y(), rejectionPercent.z() * w_estimation_trans.z());
-    #elif OBSERVER_TYPE == SLIDINGMODE_OBSERVER
-        w_estimation_trans = Eigen::Vector3f(rejectionPercent.x() * w_estimation_trans.x(), rejectionPercent.y() * w_estimation_trans.y(), rejectionPercent.z() * w_estimation_trans.z());
-    #elif OBSERVER_TYPE == SUPERTWIST_OBSERVER
-        w_estimation_trans = Eigen::Vector3f(rejectionPercent.x() * w_estimation_trans.x(), rejectionPercent.y() * w_estimation_trans.y(), rejectionPercent.z() * w_estimation_trans.z());
-    #endif
+    w_estimation_trans = Eigen::Vector3f(rejectionPercent.x() * w_estimation_trans.x(), rejectionPercent.y() * w_estimation_trans.y(), rejectionPercent.z() * w_estimation_trans.z());
 
     u_thrust += Eigen::Vector3f(0, 0, g * mass) - (kd_trans_2.array() * dp.array()).matrix() - w_estimation_trans;
     perturbed_u_thrust = u_thrust + perturbation_trans;
@@ -442,7 +455,7 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
         errorPQstream << "\neq (quaternion error): (\t" << eq.w() << ",\t" << eq.x() << ",\t" << eq.y() << ",\t" << eq.z() << ")\n";
     #endif
 
-    Tauu = J * u_torque;
+    Tauu = J * u_torque ;
     if (!Tauu.array().isFinite().all()) {
         Tauu = Eigen::Vector3f::Zero();
     }

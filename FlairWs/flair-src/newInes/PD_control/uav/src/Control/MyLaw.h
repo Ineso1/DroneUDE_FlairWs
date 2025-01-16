@@ -47,24 +47,19 @@ namespace flair {
 namespace flair {
 namespace filter {
     class MyLaw : public ControlLaw,
-    #if OBSERVER_TYPE == UDE_OBSERVER
-        public Observer::UDE
-    #elif OBSERVER_TYPE == LUENBERGER_OBSERVER
-        public Observer::Luenberger
-    #elif OBSERVER_TYPE == SUPERTWIST_OBSERVER
-        public Observer::SuperTwist
-    #elif OBSERVER_TYPE == SLIDINGMODE_OBSERVER
-        public Observer::SlidingMode
-    #else
-        public Observer::ObserverBase // Default 
-    #endif
+    public Observer::ObserverBase
     {
         public:
 
         enum class ObserverMode_t { UDE, Luenberger, SuperTwist, SlidingMode };
         ObserverMode_t observerMode;
-
         Observer::KFC kalmanFilter;
+
+        Observer::UDE ude;
+        Observer::Luenberger luenberger;
+        Observer::SlidingMode slidingMode;
+        Observer::SuperTwist superTwist;
+
 
         string something2stream;
         bool isDisturbanceActive; // Flag for disturbance activation

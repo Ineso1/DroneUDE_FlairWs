@@ -37,7 +37,7 @@ void UDE::resetUDE(){
     firstIteration_rot = true;
 }
 
-Eigen::Vector3f UDE::EstimateDisturbance_trans(const Eigen::Vector3f& p, const Eigen::Vector3f& dp, float dt) {
+Eigen::Vector3f UDE::EstimateDisturbance_trans(const Eigen::Vector3f& p, const Eigen::Vector3f& dp,  float dt) {
     Eigen::VectorXf x_t(6);
     x_t << p, dp;
     if (firstIteration_trans)
