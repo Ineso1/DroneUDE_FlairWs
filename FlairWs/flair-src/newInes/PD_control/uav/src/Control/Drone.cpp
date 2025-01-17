@@ -10,6 +10,12 @@ Drone::Drone(TargetController *controller) : DroneBase(controller) {
     kalman = false;
     perturbation = false;
     
+
+    float diameter = 8.0;
+    float fixedZ = 2.0;
+    float resolution = 0.02;
+    trayectory_circle = Trayectory(diameter,fixedZ,resolution);
+
     // Law instance
     myLaw = new MyLaw(execLayout->At(1, 0), "MyLaw");
     getFrameworkManager()->AddDeviceToLog(myLaw);
@@ -213,7 +219,8 @@ void Drone::TargetFollowControl(){
     Quaternion aim_yaw(std::cos(yawAngleInRadians / 2), 0, 0, std::sin(yawAngleInRadians / 2));
     aim_yaw.Normalize();
 
-    aim_p = currentTarget;
+
+    aim_p = trayectory_circle.getNextPoint();
     aim_dp = Vector3Df(0, 0, 0);
 
     uavVrpn->GetPosition(uav_p);

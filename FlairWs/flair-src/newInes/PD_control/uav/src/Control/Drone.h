@@ -23,6 +23,7 @@
 #include <PidThrust.h>
 #include "MyLaw.h"
 #include <iostream>
+#include "Trayectory.h"
 
 class Drone : public DroneBase {
 public:
@@ -36,6 +37,8 @@ protected:
     // Perturbation Toggle
     bool perturbation;
     bool kalman;
+    
+    Trayectory trayectory_circle;
 
     // Feedback objects
     flair::core::Vector3Df vrpnPosition;
