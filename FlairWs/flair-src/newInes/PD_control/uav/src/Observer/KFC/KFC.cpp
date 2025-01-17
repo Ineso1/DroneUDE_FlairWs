@@ -13,7 +13,7 @@ KFC::KFC()
     Hk = Eigen::MatrixXf::Identity(6, 6);
 
     Qk = Eigen::MatrixXf::Identity(6, 6) * 1.5;
-    Rk = Eigen::MatrixXf::Identity(6, 6) * 25;
+    Rk = Eigen::MatrixXf::Identity(6, 6) * 35;
 
     Pk = Eigen::MatrixXf::Identity(6, 6) * 60;
     Xk = Eigen::VectorXf::Zero(6);
