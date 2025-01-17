@@ -32,9 +32,18 @@ DroneBase::DroneBase(TargetController *controller) : UavStateMachine(controller)
     Label *someSpace_1 = new Label(disturbanceEstimator->NewRow(), "space");
     rejectPerturbation = new PushButton(disturbanceEstimator->NewRow(), "Reject Disturbance");
     
+    disturbanceRotEstimator = new GroupBox(GetButtonsLayout()->LastRowLastCol(),"DistRotEst");
+    Label *someSpace_2_1 = new Label(disturbanceRotEstimator->NewRow(), "space");
+    rejectionPercentRot_layout = new Vector3DSpinBox(disturbanceRotEstimator->NewRow(), "Rejection Rot", 0, 1, 0.0001, 6, Vector3Df(0.8, 0.8, 1.0));
+    rejectionRotModeState = new Label(disturbanceRotEstimator->NewRow(), "state");
+    rejectionRotModeState->SetText("state: ----- off");
+    Label *someSpace_2 = new Label(disturbanceRotEstimator->NewRow(), "space");
+    rejectRotPerturbation = new PushButton(disturbanceRotEstimator->NewRow(), "Reject Disturbance");
+    
+
     disturbanceSim = new GroupBox(GetButtonsLayout()->LastRowLastCol(),"DistSim");
     perturbation_layout = new Vector3DSpinBox(disturbanceSim->NewRow(), "Disturbance", -10, 10, 0.0001, 6, Vector3Df(0.0, 0.0, 0.0));
-    Label *someSpace_2 = new Label(disturbanceEstimator->NewRow(), "space");
+    Label *someSpace_3 = new Label(disturbanceEstimator->NewRow(), "space");
     disturbanceModeState = new Label(disturbanceSim->NewRow(), "state");
     disturbanceModeState->SetText("state: ----- off");
     togglePerturbation = new PushButton(disturbanceSim->NewRow(), "Toggle Disturbance");
@@ -110,6 +119,10 @@ void DroneBase::ExtraCheckPushButton() {
     {
         RejectDisturbance();
     }
+    if (rejectRotPerturbation->Clicked())
+    {
+        RejectRotDisturbance();
+    }
     if (toggleKalman->Clicked())
     {
         ApplyKalman();
@@ -157,12 +170,12 @@ void DroneBase::StartTrajectory() {
     if( behaviourMode == BehaviourMode_t::Trajectory) {
         Thread::Warn("UDEdrone: already in this mode\n");
     }
-    // if (SetOrientationMode(OrientationMode_t::Manual)) {
-    //     Thread::Info("esta vaina: start \n");
-    // } else {
-    //     Thread::Warn("esta vaina: could not start otra vez \n");
-    //     return;
-    // }
+    if (SetOrientationMode(OrientationMode_t::Manual)) {
+        Thread::Info("esta vaina: start \n");
+    } else {
+        Thread::Warn("esta vaina: could not start otra vez \n");
+        return;
+    }
     if (SetThrustMode(ThrustMode_t::Custom)) {
         Thread::Info("UDEdrone: Custom Thrust Mode Set\n");
     } else {
@@ -186,6 +199,10 @@ void DroneBase::HandleDisturbanceToggle() {
 }
 
 void DroneBase::RejectDisturbance() {
+    std::cout << "Need to override this" << std::endl;
+}
+
+void DroneBase::RejectRotDisturbance() {
     std::cout << "Need to override this" << std::endl;
 }
 

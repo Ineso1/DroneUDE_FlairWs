@@ -63,6 +63,7 @@ namespace filter {
 
         string something2stream;
         bool isDisturbanceActive; // Flag for disturbance activation
+        bool isDisturbanceRotActive; // Flag for disturbance rotational activation
         bool isKalmanActive;
         float activation_delay;   // Delay time for disturbance activation 
         float this_time;
@@ -82,7 +83,7 @@ namespace filter {
             Vector3DSpinBox *kp_trans_layout;
             Vector3DSpinBox *kd_trans_1_layout;
             Vector3DSpinBox *kd_trans_2_layout;
-			DoubleSpinBox *sat_trans_layout;
+            DoubleSpinBox *sat_trans_layout;
 
         // Layout drone properties
             DoubleSpinBox *mass_layout;
@@ -135,6 +136,7 @@ namespace filter {
             Eigen::Vector3f perturbation_rot;
 
             Eigen::Vector3f rejectionPercent;
+            Eigen::Vector3f rejectionRotPercent;
             
         // Custom time conditions
             bool firstUpdate;

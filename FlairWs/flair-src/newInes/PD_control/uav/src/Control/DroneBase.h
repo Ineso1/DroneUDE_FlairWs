@@ -49,6 +49,7 @@ protected:
     Tab *customLawTab;
     GroupBox* positionBehaveBox;
     GroupBox* disturbanceEstimator;
+    GroupBox* disturbanceRotEstimator;
     GroupBox *disturbanceSim;
     GroupBox *kalmanActivation;
 
@@ -62,7 +63,9 @@ protected:
     Vector3DSpinBox *targetPosition_layout;
     DoubleSpinBox *yawAngle_layout;
     Vector3DSpinBox *rejectionPercent_layout;
+    Vector3DSpinBox *rejectionPercentRot_layout;
     PushButton *rejectPerturbation;
+    PushButton *rejectRotPerturbation;
     Vector3DSpinBox *perturbation_layout;
 
     ComboBox *beahviourMode_layout;
@@ -70,6 +73,7 @@ protected:
 
     Label *disturbanceModeState;
     Label *rejectionModeState;
+    Label *rejectionRotModeState;
     Label *kalmanActivationState;
 
     MetaVrpnObject *uavVrpn;
@@ -83,6 +87,7 @@ protected:
     virtual void ApplyControl(void);
     virtual void PositionChange(void);
     virtual void RejectDisturbance(void);
+    virtual void RejectRotDisturbance(void);
     virtual void ApplyKalman(void);
 
     // State Machine Functions

@@ -37,7 +37,7 @@ void UDE::resetUDE(){
     firstIteration_rot = true;
 }
 
-Eigen::Vector3f UDE::EstimateDisturbance_trans(const Eigen::Vector3f& p, const Eigen::Vector3f& dp,  float dt) {
+Eigen::Vector3f UDE::EstimateDisturbance_trans(const Eigen::Vector3f& p, const Eigen::Vector3f& dp, float dt) {
     Eigen::VectorXf x_t(6);
     x_t << p, dp;
     if (firstIteration_trans)
@@ -64,10 +64,9 @@ Eigen::Vector3f UDE::EstimateDisturbance_trans(const Eigen::Vector3f& p, const E
 }
 
 Eigen::Vector3f UDE::EstimateDisturbance_rot(const Eigen::Quaternionf& q, const Eigen::Vector3f& omega, float dt) {
-    Eigen::Vector3f u_torque_UDE = u_torque - omega.cross(J * omega);
+    Eigen::Vector3f u_torque_UDE = J * u_torque;
     x_rot = Eigen::VectorXf(6);
-    Eigen::Vector3f q_rvec = rotvec(q);
-    x_rot << q_rvec, omega;
+    x_rot << q.vec(), omega;
     if (firstIteration_rot)
     {
         xi_UDE_rot = -Omega_UDE_rot * (B_pinv_rot * x_rot);

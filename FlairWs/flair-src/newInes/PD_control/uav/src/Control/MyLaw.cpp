@@ -16,6 +16,7 @@ MyLaw::MyLaw(const LayoutPosition* position, string name) : ControlLaw(position-
     activation_delay = 0.0f;
     this_time = 0;
     rejectionPercent = Eigen::Vector3f(0,0,0);
+    rejectionRotPercent = Eigen::Vector3f(0,0,0);
 
     /************************
     Mutex for data access.
@@ -327,6 +328,9 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
 
     if(!isDisturbanceActive){
         w_estimation_trans *= 0; 
+    }
+
+    if(!isDisturbanceRotActive){
         w_estimation_rot *= 0;
     }
 
@@ -376,6 +380,7 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
     Eigen::Vector3f perturbed_u_thrust;
     float perturbed_Fu;
 
+    w_estimation_rot = Eigen::Vector3f(rejectionRotPercent.x() * w_estimation_rot.x(), rejectionRotPercent.y() * w_estimation_rot.y(), rejectionRotPercent.z() * w_estimation_rot.z());
     w_estimation_trans = Eigen::Vector3f(rejectionPercent.x() * w_estimation_trans.x(), rejectionPercent.y() * w_estimation_trans.y(), rejectionPercent.z() * w_estimation_trans.z());
 
     u_thrust += Eigen::Vector3f(0, 0, g * mass) - (kd_trans_2.array() * dp.array()).matrix() - w_estimation_trans;
@@ -455,7 +460,7 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
         errorPQstream << "\neq (quaternion error): (\t" << eq.w() << ",\t" << eq.x() << ",\t" << eq.y() << ",\t" << eq.z() << ")\n";
     #endif
 
-    Tauu = J * u_torque ;
+    Tauu = J * u_torque - w_estimation_rot;
     if (!Tauu.array().isFinite().all()) {
         Tauu = Eigen::Vector3f::Zero();
     }

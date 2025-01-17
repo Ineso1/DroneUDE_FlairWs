@@ -52,6 +52,7 @@ protected:
     void HandleDisturbanceToggle(void) override;
     void ApplyKalman(void) override;
     void RejectDisturbance(void) override;
+    void RejectRotDisturbance(void) override;
 
     // Control behave
     void ApplyControl(void) override;
