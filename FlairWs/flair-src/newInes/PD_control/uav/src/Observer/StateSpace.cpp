@@ -27,6 +27,7 @@ StateSpace::StateSpace() {
     B_trans.block<3, 3>(3, 0) = Eigen::Matrix3f::Identity() / mass;
     C_trans = Eigen::MatrixXf::Zero(3, 6);
     C_trans.block<3, 3>(0, 0) = Eigen::Matrix3f::Identity();
+    // C_trans.block<3, 3>(3, 0) = Eigen::Matrix3f::Identity();
     B_pinv_trans = B_trans.completeOrthogonalDecomposition().pseudoInverse();
 
     w_hat_trans = Eigen::Vector3f::Zero();

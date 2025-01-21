@@ -41,7 +41,7 @@ public:
     virtual ~DroneBase();
 
 protected:
-    enum class BehaviourMode_t { Default, PositionHold, Trajectory };
+    enum class BehaviourMode_t { Default, PositionHold, Trajectory, Sequence };
     // enum class BehaviourMode_t { Default, PositionControl, TrajectoryFollower };
     BehaviourMode_t behaviourMode;
 

@@ -9,7 +9,8 @@ DroneBase::DroneBase(TargetController *controller) : UavStateMachine(controller)
 
     beahviourMode_layout = new ComboBox(GetButtonsLayout()->NewRow(),"Select behavior");
     beahviourMode_layout->AddItem("Position");
-    beahviourMode_layout->AddItem("Trajectory");
+    beahviourMode_layout->AddItem("Trajectory"); 
+    beahviourMode_layout->AddItem("Sequence"); 
 
     startTrajectory = new PushButton(GetButtonsLayout()->LastRowLastCol(), "Start Slected Behaiour");
     stopTrajectory = new PushButton(GetButtonsLayout()->LastRowLastCol(), "Stop");

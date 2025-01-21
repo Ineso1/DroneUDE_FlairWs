@@ -5,6 +5,7 @@ Drone::Drone(TargetController *controller) : DroneBase(controller) {
     
     //Behave
     algorithmBehaviourMode = AlgorithmBehaviourMode_t::PositionPoint;
+    sequenceFirstTime = true;
 
     // Toggle variables
     kalman = false;
@@ -107,6 +108,9 @@ void Drone::ApplyControl() {
             break;
         case 1:
             TargetFollowControl();
+            break;
+        case 2:
+            TestObserverSequence();
             break;
     }
 }
@@ -248,4 +252,105 @@ void Drone::TargetFollowControl(){
     myLaw->SetTarget(aim_p, aim_dp, aim_yaw);
     myLaw->UpdateDynamics(uav_p, uav_dp, q, w);
     myLaw->Update(GetTime());
+}
+
+
+void Drone::TestObserverSequence(void){
+    if(sequenceFirstTime){
+        previous_chrono_time_sequence = std::chrono::high_resolution_clock::now();
+        sequenceTime = 0;
+        sequenceFirstTime = false;
+    }
+
+    float dt;
+    auto current_time_sequence = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<float> alt_dt = current_time_sequence - previous_chrono_time_sequence;
+    previous_chrono_time_sequence = current_time_sequence;
+    dt = alt_dt.count();
+
+    sequenceTime += dt;
+
+    Vector3Df ref_p(0, 0, 0);
+    Vector3Df uav_p, uav_dp; 
+    Vector3Df aim_p, aim_dp;
+    Vector3Df rejectionPercent = flair::core::Vector3Df(rejectionPercent_layout->Value().x, rejectionPercent_layout->Value().y, rejectionPercent_layout->Value().z);
+    Quaternion q = GetCurrentQuaternion();
+    Vector3Df w;
+    yawAngle = yawAngle_layout->Value();
+    float yawAngleInRadians = yawAngle * M_PI / 180.0;
+    Quaternion aim_yaw(std::cos(yawAngleInRadians / 2), 0, 0, std::sin(yawAngleInRadians / 2));
+    aim_yaw.Normalize();
+
+    if(sequenceTime > 0 && sequenceTime < 13){
+        std::cout<<"+ \t"<<std::endl;
+        currentTarget = Vector3Df(0,0,2);
+    } 
+    if(sequenceTime > 30 && sequenceTime < 50){
+        std::cout<<"+ \t"<<std::endl;
+        currentTarget = Vector3Df(3,4,3);
+    } 
+    if (sequenceTime > 7 && sequenceTime < 20){
+        myLaw->isDisturbanceActive = true;
+        myLaw->isDisturbanceRotActive = true;
+        std::cout<<"- \t"<<std::endl;
+    }
+    if (sequenceTime > 8 && sequenceTime < 20){
+        perturbation = true;
+        std::cout<<"p \t"<<std::endl;
+    }
+    else {
+        perturbation = false;
+        std::cout<<". \t"<<std::endl;
+    }
+    if (sequenceTime > 50){
+        std::cout<<"; \t"<<std::endl;
+    }
+
+    if (perturbation) {
+        Vector3Df perturbationVec = flair::core::Vector3Df(perturbation_layout->Value().x, perturbation_layout->Value().y, perturbation_layout->Value().z);
+        myLaw->SetPerturbation(perturbationVec, Vector3Df(0, 0, 0));
+        disturbanceModeState->SetText("state: on +++++");
+    } else {
+        myLaw->SetPerturbation(Vector3Df(0, 0, 0), Vector3Df(0, 0, 0));
+        disturbanceModeState->SetText("state: ----- off");
+    }
+    if(myLaw->isDisturbanceActive){
+        rejectionModeState->SetText("state: on +++++");
+    }
+    else{
+        rejectionModeState->SetText("state: ----- off");
+    }
+    if(myLaw->isDisturbanceRotActive){
+        rejectionRotModeState->SetText("state: on +++++");
+    }
+    else{
+        rejectionRotModeState->SetText("state: ----- off");
+    }
+
+    aim_p = currentTarget;
+    aim_dp = Vector3Df(0, 0, 0);
+
+    uavVrpn->GetPosition(uav_p);
+    uavVrpn->GetSpeed(uav_dp);
+
+    MixOrientation();
+    q = mixQuaternion;
+    w = mixAngSpeed;
+
+    uav_p = uav_p - ref_p;
+    Quaternion qze = aim_yaw.GetConjugate() * q;
+    Vector3Df thetaze = 2 * qze.GetLogarithm();
+    float zsign = 1;
+    if (thetaze.GetNorm() >= 3.1416) {
+        zsign = -1;
+    }
+    aim_yaw = zsign * aim_yaw;
+
+    CoordFrameCorrection(uav_p, uav_dp, w, aim_p);
+
+    myLaw->SetRejectionPercent(rejectionPercent);
+    myLaw->SetTarget(aim_p, aim_dp, aim_yaw);
+    myLaw->UpdateDynamics(uav_p, uav_dp, q, w);
+    myLaw->Update(GetTime());
+
 }

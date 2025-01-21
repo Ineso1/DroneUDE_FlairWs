@@ -134,6 +134,11 @@ MyLaw::MyLaw(const LayoutPosition* position, string name) : ControlLaw(position-
             rotationOutputFileCSV       << "domega_x,domega_y,domega_z,omega_x,omega_y,omega_z,"
                                         << "dq_w,dq_x,dq_y,dq_z,q_w,q_x,q_y,q_z,dt\n";
         #endif
+        #ifdef SAVE_ERRORS_CSV
+            errorsFilePath = ERRRORS_FILE_PATH_CSV;
+            errorsOutputFileCSV.open(errorsFilePath, std::ios::trunc);
+            errorsOutputFileCSV    << "ep_x,ep_y,ep_z,eq_w,eq_x,eq_y,eq_z,dt\n";
+        #endif
     #endif
 }
 
@@ -510,6 +515,10 @@ void MyLaw::CalculateControl(const Eigen::MatrixXf& stateM, Eigen::MatrixXf& out
     #ifdef SAVE_REAL_STATE_SPACE_CSV
         SaveStateCSV(p, dp, ddp, dw, w, dq, q, dt); 
     #endif
+
+    #ifdef SAVE_ERRORS_CSV
+        SaveErrorsCSV(ep, eq, dt);
+    #endif
 }
 
 
@@ -615,6 +624,16 @@ void MyLaw::SaveStateCSV(Eigen::Vector3f &p, Eigen::Vector3f &dp,Eigen::Vector3f
                                 << q.w() << "," << q.x() << "," << q.y() << "," << q.z() << "," << dt << "\n";
     } else {
         std::cerr << "Error opening RealStateSpace_rot.csv\n";
+    }
+}
+
+void MyLaw::SaveErrorsCSV(Eigen::Vector3f &ep, Eigen::Quaternionf &eq, float &dt){
+    if (errorsOutputFileCSV.is_open()) {
+        errorsOutputFileCSV    << std::fixed << std::setprecision(6)
+                                    << ep.x() << "," << ep.y() << "," << ep.z() << ","
+                                    << eq.w() << "," << eq.x() << "," << eq.y() << "," << eq.z() << "," << dt << "\n";
+    } else {
+        std::cerr << "Error opening Errors.csv\n";
     }
 }
 

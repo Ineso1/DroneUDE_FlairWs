@@ -52,7 +52,7 @@ Eigen::Vector3f UDE::EstimateDisturbance_trans(const Eigen::Vector3f& p, const E
                  - Omega_UDE_trans * (u_thrust - Eigen::Vector3f(0, 0, g * mass));
     xi_UDE_trans += dt * xi_dot_trans;
     w_hat_trans = xi_UDE_trans + Omega_UDE_trans * (B_pinv_trans * x_t);
-    dx_trans = A_trans * x_t + B_trans * u_thrust + B_trans * w_hat_trans;
+    dx_trans = A_trans * x_t + B_trans * (u_thrust - Eigen::Vector3f(0, 0, g * mass)) + B_trans * w_hat_trans;
     x_trans = x_t;
     #ifdef SAVE_STATE_ESTIMATION_CSV
         SaveStateEstimationCSV(x_trans, dx_trans, w_hat_trans, "TranslationalEstimation.csv");
@@ -64,9 +64,11 @@ Eigen::Vector3f UDE::EstimateDisturbance_trans(const Eigen::Vector3f& p, const E
 }
 
 Eigen::Vector3f UDE::EstimateDisturbance_rot(const Eigen::Quaternionf& q, const Eigen::Vector3f& omega, float dt) {
-    Eigen::Vector3f u_torque_UDE = J * u_torque;
+    Eigen::Vector3f u_torque_UDE = u_torque - omega.cross(J * omega);
     x_rot = Eigen::VectorXf(6);
-    x_rot << q.vec(), omega;
+    // x_rot << q.vec(), omega;
+    Eigen::Vector3f q_rvec = rotvec(q);
+    x_rot << q_rvec, omega;
     if (firstIteration_rot)
     {
         xi_UDE_rot = -Omega_UDE_rot * (B_pinv_rot * x_rot);

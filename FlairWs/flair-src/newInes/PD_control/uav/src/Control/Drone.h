@@ -32,6 +32,9 @@ public:
 protected:
     enum class AlgorithmBehaviourMode_t {PositionPoint, TrajectoryFollow};
     AlgorithmBehaviourMode_t algorithmBehaviourMode;
+    std::chrono::high_resolution_clock::time_point previous_chrono_time_sequence;
+    float sequenceTime;
+    bool sequenceFirstTime;
 
     // Perturbation Toggle
     bool perturbation;
@@ -68,6 +71,8 @@ protected:
     // Control behave algorithm functions
     void PositionControl(void);
     void TargetFollowControl(void);
+    void TestObserverSequence(void);
+
 
 private:
     Quaternion mixQuaternion;

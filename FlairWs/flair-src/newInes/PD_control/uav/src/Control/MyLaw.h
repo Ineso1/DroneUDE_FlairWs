@@ -155,11 +155,14 @@ namespace filter {
             std::ofstream controlDebugFileCSV;
             std::ofstream translationOutputFileCSV;
             std::ofstream rotationOutputFileCSV;
+            std::ofstream errorsOutputFileCSV;
 
             std::string controlFilePath;
             std::string debugFilePath;
             std::string translationFilePath;     
-            std::string rotationFilePath;     
+            std::string rotationFilePath;
+            std::string errorsFilePath;
+
         
     ///////////////////////////
     // DYNAMIC VARIABLES MATRIX
@@ -210,7 +213,8 @@ namespace filter {
             void SaveStateCSV(Eigen::Vector3f &p, Eigen::Vector3f &dp,Eigen::Vector3f &ddp, Eigen::Vector3f &domega, Eigen::Vector3f &omega, Eigen::Quaternionf &dq, Eigen::Quaternionf &q, float &dt);
             void SaveControlCSV();
             void SaveDebugCSV(float, const Eigen::Vector3f&, const Eigen::Vector3f&, const Eigen::Vector3f&, const Eigen::Vector3f&, const Eigen::Vector3f&, const Eigen::Quaternionf&, const Eigen::Vector3f&, const Eigen::Vector3f&, const Eigen::Vector3f&);
-            
+            void SaveErrorsCSV(Eigen::Vector3f &ep, Eigen::Quaternionf &eq, float &dt);
+
     ///////////////////////////
     // QUATERNION FUNCTIONS
     ///////////////////////////

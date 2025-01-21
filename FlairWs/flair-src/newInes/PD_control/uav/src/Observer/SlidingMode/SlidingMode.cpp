@@ -5,7 +5,7 @@ namespace Observer {
 
 SlidingMode::SlidingMode() {
     L_trans = 1.0f;
-    L_rot = 0.1f;
+    L_rot = 1.0f;
 
     epsilon_trans = 0.0001f;
     epsilon_rot = 0.0001f;

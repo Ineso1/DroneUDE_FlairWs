@@ -3,8 +3,8 @@
 namespace Observer {
 
 SuperTwist::SuperTwist() {
-    L_trans = 5.0f;
-    L_rot = 0.05f;
+    L_trans = 3.0f;
+    L_rot = 2.5f;
 
     lambda0_trans = 1.5f * std::sqrt(L_trans);
     lambda1_trans = 1.1f * L_trans;
@@ -14,10 +14,10 @@ SuperTwist::SuperTwist() {
     eta_trans = Eigen::Vector3f::Zero();
     eta_rot = Eigen::Vector3f::Zero();
 
-    c_p_trans = 1.0f;
-    c_dp_trans = 0.9f;
-    c_q_rot = 0.05f;
-    c_omega_rot = 0.01f;
+    c_p_trans = 1.5f;
+    c_dp_trans = 1.5f;
+    c_q_rot = 0.2f;
+    c_omega_rot = 0.1f;
 
     x_trans = Eigen::VectorXf::Zero(6);
     x_rot = Eigen::VectorXf::Zero(6);
